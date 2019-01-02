@@ -4,7 +4,8 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # Variables & Functions
 # ---------------------------------------------------------------------------------------------------------------------
-APP_DATABASE_NAME='esi'
+MOTOFLAME_DATABASE_NAME='motoflame'
+EVE_DATABASE_NAME='eveservice'
 
 echoTitle () {
     echo -e "\033[0;30m\033[42m -- $1 -- \033[0m"
@@ -32,7 +33,8 @@ apt-get install -y mysql-server-5.6 mysql-client-5.6 mysql-common-5.6
 
 
 # Setup database
-mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $APP_DATABASE_NAME;";
+mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $MOTOFLAME_DATABASE_NAME;";
+mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $EVE_DATABASE_NAME;";
 mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password';"
 mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'password';"
 sudo service mysql restart
@@ -56,7 +58,7 @@ apt-get install -y php7.1 php7.1-fpm
 apt-get install -y php7.1-mysql
 apt-get install -y mcrypt php7.1-mcrypt
 apt-get install -y php7.1-cli php7.1-curl php7.1-mbstring php7.1-xml php7.1-mysql
-apt-get install -y php7.1-json php7.1-cgi php7.1-gd php-imagick php7.1-bz2 php7.1-zip
+apt-get install -y php7.1-json php7.1-cgi php7.1-gd php-imagick php7.1-bz2 php7.1-zip php7.1-bcmath
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -73,11 +75,20 @@ mv composer.phar /usr/local/bin/composer
 # ---------------------------------------------------------------------------------------------------------------------
 # YII2
 # ---------------------------------------------------------------------------------------------------------------------
-#echoTitle 'Installing: Yii2'
-#cd /var/www/html/motoflame
-#composer create-project --prefer-dist yiisoft/yii2-app-basic basic
-#git init
-#git remote add origin https://github.com/andrewverner/motoflame.git
+echoTitle 'Installing: Yii2 Motoflame'
+cd /var/www/html
+sudo mkdir motoflame
+cd motoflame
+composer create-project --prefer-dist yiisoft/yii2-app-basic basic
+git init
+git remote add origin https://github.com/andrewverner/motoflame.git
+
+echoTitle 'Installing: Yii2 EVE Service'
+cd /var/www/html
+composer create-project --prefer-dist yiisoft/yii2-app-basic eve-service
+cd eve-service
+git init
+git remote add origin https://github.com/andrewverner/eve-service.git
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -98,37 +109,38 @@ EOF
 # ---------------------------------------------------------------------------------------------------------------------
 echoTitle 'Installing: NGINX'
 apt-get install -y nginx
-rm /etc/nginx/sites-available/default
-touch /etc/nginx/sites-available/default
 
 mkdir /var/www/log
-touch /var/www/log/esi_access.log
-touch /var/www/log/esi_error.log
+touch /var/www/log/motoflame_access.log
+touch /var/www/log/motoflame_error.log
+touch /var/www/log/eve_access.log
+touch /var/www/log/eve_error.log
+sudo cp /provision/nginx/sites-enabled/* /etc/nginx/sites-enabled/
 
-cat >> /etc/nginx/sites-enabled/motoflame.conf <<'EOF'
-server {
-  listen   80;
-  root /var/www/html/esi;
-  index index.php index.html;
-  server_name esi.local;
-  error_log /var/www/log/esi_error.log;
-  access_log /var/www/log/esi_access.log;
-  location / {
-    try_files $uri $uri/ /index.php$is_args$args;
-  }
-  location ~ ^/assets/.*\.php$ {
-        deny all;
-    }
-  location ~ \.php$ {
-    try_files $uri /index.php =404;
-    fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_pass unix:/run/php/php7.1-fpm.sock;
-    fastcgi_index index.php;
-    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    include fastcgi_params;
-  }
-}
-EOF
+
+echoTitle 'Installing Redis'
+sudo apt-get update
+sudo apt-get install build-essential tcl
+cd /tmp
+curl -O http://download.redis.io/redis-stable.tar.gz
+tar xzvf redis-stable.tar.gz
+cd redis-stable
+make
+make test
+sudo make install
+sudo mkdir /etc/redis
+sudo cp /provision/redis/redis.conf /etc/redis/
+sudo cp /provision/redis/redis.service /etc/systemd/system/
+sudo adduser --system --group --no-create-home redis
+sudo mkdir /var/lib/redis
+sudo chown redis:redis /var/lib/redis
+sudo chmod 770 /var/lib/redis
+
+
+echoTitle 'Installing RabbitMQ'
+sudo apt-get install -y rabbitmq-server
+sudo service rabbitmq-server start
+
 
 echoTitle 'Starting NGINx'
 sudo service nginx start
@@ -145,5 +157,6 @@ echo "NGINX is available on port 80"
 echo "Don't forget to:"
 echo "1. generate ssh-key and contact to admin to be able to pull project changes from the repo"
 echo "2. add the following line into hosts file:"
-echo "192.168.100.105   esi.local"
-echo -e "Head over to http://esi.local/ or http://192.168.100.105/ to get started"
+echo "192.168.100.105   eve.local"
+echo "192.168.100.105   motoflame.local"
+echo -e "Head over to http://eve.local/, http://motoflame.local/ or http://192.168.100.105/ to get started"

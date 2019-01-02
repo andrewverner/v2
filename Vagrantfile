@@ -7,7 +7,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "private_network", ip: "192.168.100.105"
 
-  config.vm.synced_folder "./html", "/var/www/html", id: "vagrant-root", :group=>'www-data', :mount_options=>['dmode=775,fmode=775']
+  config.vm.synced_folder "./html", "/var/www/html",
+    id: "vagrant-root",
+    :group=>'www-data',
+    :mount_options=>['dmode=775,fmode=775']
+  config.vm.synced_folder "./provision", "/provision",
+    id: "configs",
+    :group=>'www-data',
+    :mount_options=>['dmode=775,fmode=775']
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
