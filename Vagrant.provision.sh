@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 MOTOFLAME_DATABASE_NAME='motoflame'
 EVE_DATABASE_NAME='eveservice'
+FETISH_DATABASE_NAME='eveservice'
 
 echoTitle () {
     echo -e "\033[0;30m\033[42m -- $1 -- \033[0m"
@@ -35,6 +36,7 @@ apt-get install -y mysql-server-5.6 mysql-client-5.6 mysql-common-5.6
 # Setup database
 mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $MOTOFLAME_DATABASE_NAME;";
 mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $EVE_DATABASE_NAME;";
+mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $FETISH_DATABASE_NAME;";
 mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password';"
 mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'password';"
 sudo service mysql restart
@@ -90,6 +92,13 @@ cd eve-service
 git init
 git remote add origin https://github.com/andrewverner/eve-service.git
 
+echoTitle 'Installing: Fetish landing'
+cd /var/www/html
+composer create-project --prefer-dist yiisoft/yii2-app-basic fetish
+cd fetish
+git init
+git remote add origin https://github.com/andrewverner/fetish.git
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # XDebug
@@ -115,6 +124,8 @@ touch /var/www/log/motoflame_access.log
 touch /var/www/log/motoflame_error.log
 touch /var/www/log/eve_access.log
 touch /var/www/log/eve_error.log
+touch /var/www/log/fetish_access.log
+touch /var/www/log/fetish_error.log
 sudo cp /provision/nginx/sites-enabled/* /etc/nginx/sites-enabled/
 
 
@@ -159,4 +170,5 @@ echo "1. generate ssh-key and contact to admin to be able to pull project change
 echo "2. add the following line into hosts file:"
 echo "192.168.100.105   eve.local"
 echo "192.168.100.105   motoflame.local"
+echo "192.168.100.105   fetish.local"
 echo -e "Head over to http://eve.local/, http://motoflame.local/ or http://192.168.100.105/ to get started"

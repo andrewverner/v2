@@ -2,6 +2,13 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/html" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/html/esi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/html/eve" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/html/eve-service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/html/eve/vendor/deniskhodakovskiy/esi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/html/eve/vendor/yiisoft/yii2-bootstrap" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/html/fetish" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/html/motoflame" vcs="Git" />
   </component>
 </project>
