@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------------------------------------------------------
 MOTOFLAME_DATABASE_NAME='motoflame'
 EVE_DATABASE_NAME='eveservice'
-FETISH_DATABASE_NAME='eveservice'
+FETISH_DATABASE_NAME='fetish'
+RUBBER_DATABASE_NAME='rubber'
 
 echoTitle () {
     echo -e "\033[0;30m\033[42m -- $1 -- \033[0m"
@@ -37,9 +38,13 @@ apt-get install -y mysql-server-5.6 mysql-client-5.6 mysql-common-5.6
 mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $MOTOFLAME_DATABASE_NAME;";
 mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $EVE_DATABASE_NAME;";
 mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $FETISH_DATABASE_NAME;";
+mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS $RUBBER_DATABASE_NAME;";
 mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password';"
 mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'password';"
 sudo service mysql restart
+
+mysql -u root -ppassword motoflame < /provision/dumps/motoflame.sql
+mysql -u root -ppassword eveservice < /provision/dumps/eveservice.sql
 
 
 # Import SQL file
@@ -83,22 +88,51 @@ sudo mkdir motoflame
 cd motoflame
 composer create-project --prefer-dist yiisoft/yii2-app-basic basic
 git init
-git remote add origin https://github.com/andrewverner/motoflame.git
+git remote add origin https://andrewverner:sin45sqrt22@github.com/andrewverner/motoflame.git
+git fetch origin
+git reset --hard origin/master
+cd basic
+./yii migrate --interactive=0
+rm composer.lock
+composer install
+
 
 echoTitle 'Installing: Yii2 EVE Service'
 cd /var/www/html
 composer create-project --prefer-dist yiisoft/yii2-app-basic eve-service
 cd eve-service
 git init
-git remote add origin https://github.com/andrewverner/eve-service.git
+git remote add origin https://andrewverner:sin45sqrt22@github.com/andrewverner/eve-service.git
+git fetch origin
+git reset --hard origin/master
+cp /provision/db/eveservice/* /var/www/html/eve-service/config/
+./yii migrate --interactive=0
+rm composer.lock
+composer install
 
 echoTitle 'Installing: Fetish landing'
 cd /var/www/html
 composer create-project --prefer-dist yiisoft/yii2-app-basic fetish
 cd fetish
 git init
-git remote add origin https://github.com/andrewverner/fetish.git
+git remote add origin https://andrewverner:sin45sqrt22@github.com/andrewverner/fetish.git
+git fetch origin
+git reset --hard origin/master
+cp /provision/db/fetish/* /var/www/html/fetish/config/
+./yii migrate --interactive=0
+composer install
 
+echoTitle 'Installing: Rubber community'
+cd /var/www/html
+composer create-project --prefer-dist yiisoft/yii2-app-basic rubber
+cd rubber
+git init
+git remote add origin https://andrewverner:sin45sqrt22@github.com/andrewverner/rubber.git
+git fetch origin
+git reset --hard origin/master
+cp /provision/db/rubber/* /var/www/html/rubber/config/
+./yii migrate --interactive=0
+composer install
 
 # ---------------------------------------------------------------------------------------------------------------------
 # XDebug
@@ -126,6 +160,8 @@ touch /var/www/log/eve_access.log
 touch /var/www/log/eve_error.log
 touch /var/www/log/fetish_access.log
 touch /var/www/log/fetish_error.log
+touch /var/www/log/rubber_error.log
+touch /var/www/log/rubber_error.log
 sudo cp /provision/nginx/sites-enabled/* /etc/nginx/sites-enabled/
 
 
@@ -154,7 +190,10 @@ sudo service rabbitmq-server start
 
 
 echoTitle 'Starting NGINx'
-sudo service nginx start
+sudo service nginx restart
+
+echoTitle 'Starting Redis'
+redis-server &
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Others
@@ -171,4 +210,5 @@ echo "2. add the following line into hosts file:"
 echo "192.168.100.105   eve.local"
 echo "192.168.100.105   motoflame.local"
 echo "192.168.100.105   fetish.local"
+echo "192.168.100.105   rubber.local"
 echo -e "Head over to http://eve.local/, http://motoflame.local/ or http://192.168.100.105/ to get started"
