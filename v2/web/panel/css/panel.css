@@ -1,0 +1,18 @@
+#panel-menu {
+    position: fixed;
+    overflow: scroll;
+    width: 200px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+#panel-content {
+    position: fixed;
+    overflow: scroll;
+    top: 0;
+    left: 200px;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+}

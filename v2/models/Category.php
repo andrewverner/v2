@@ -50,9 +50,10 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tree', 'lft', 'rgt', 'depth', 'name'], 'required'],
+            [['name'], 'required'],
             [['tree', 'lft', 'rgt', 'depth'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['tree', 'lft', 'rgt', 'depth'], 'safe'],
         ];
     }
 
@@ -78,5 +79,13 @@ class Category extends \yii\db\ActiveRecord
     public static function find()
     {
         return new CategoryQuery(get_called_class());
+    }
+
+    /**
+     * @return Category
+     */
+    public function getParentNode()
+    {
+        return $this->parents(1)->one();
     }
 }

@@ -8,14 +8,19 @@
 
 namespace app\controllers;
 
+use app\models\Category;
 use yii\web\Controller;
 
 class TestController extends Controller
 {
     public function actionIndex()
     {
-        $auth = \Yii::$app->authManager;
-        $authorRole = $auth->getRole('admin');
-        $auth->assign($authorRole, 1);
+        $category = new Category(['name' => 'Корень']);
+        $category->makeRoot();
+        if ($category->validate()) {
+            $category->save();
+        } else {
+            print_r($category->errors);
+        }
     }
 }

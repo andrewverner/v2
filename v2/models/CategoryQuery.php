@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use creocoder\nestedsets\NestedSetsQueryBehavior;
+
 /**
  * This is the ActiveQuery class for [[Category]].
  *
@@ -9,10 +11,11 @@ namespace app\models;
  */
 class CategoryQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
+    public function behaviors() {
+        return [
+            NestedSetsQueryBehavior::className(),
+        ];
+    }
 
     /**
      * {@inheritdoc}

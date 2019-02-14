@@ -21,7 +21,7 @@ class m190214_090808_create_hash_table extends Migration
             'used' => $this->tinyInteger()->notNull()->defaultValue(0),
             'created' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
             'updated' => $this->dateTime(),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

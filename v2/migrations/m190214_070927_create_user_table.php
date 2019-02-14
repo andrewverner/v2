@@ -20,7 +20,7 @@ class m190214_070927_create_user_table extends Migration
             'active' => $this->tinyInteger(1)->defaultValue(0),
             'blocked' => $this->tinyInteger()->notNull()->defaultValue(0),
             'created' => $this->dateTime()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

@@ -19,7 +19,7 @@ class m190214_144353_create_category_table extends Migration
             'rgt' => $this->integer()->notNull(),
             'depth' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

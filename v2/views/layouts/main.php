@@ -60,7 +60,7 @@ AppAsset::register($this);
             ],
             [
                 'label' => Yii::t('app', 'Admin panel'),
-                'url' => ['/panel'],
+                'url' => ['/panel/panel'],
                 'visible' => !Yii::$app->user->isGuest && Yii::$app->user->can('admin'),
             ]
         ],

@@ -37,7 +37,22 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['created'], 'safe'],
             [['username', 'email'], 'string', 'max' => 45],
             [['password'], 'string', 'max' => 255],
+            [['username', 'email'], 'checkForUnique']
         ];
+    }
+
+    public function checkForUnique($attribute)
+    {
+        $model = self::findOne([
+            $attribute => $this->{$attribute},
+            'active' => 1,
+        ]);
+
+        if ($model) {
+            $this->addError($attribute, Yii::t('app', '{attribute} is already taken', [
+                'attribute' => $this->attributeLabels()[$attribute],
+            ]));
+        }
     }
 
     /**

@@ -15,6 +15,12 @@ $config = [
     'modules' => [
         'panel' => [
             'class' => 'app\modules\panel\Panel',
+            'components' => [
+                'view' => [
+                    'class' => '\yii\web\View',
+                    'theme' => 'panel',
+                ],
+            ],
         ],
     ],
     'components' => [
