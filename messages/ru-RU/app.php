@@ -8,4 +8,5 @@ return [
     'Your account has been activated successfully. Now you can sign in' => 'Ваш аккаунт был успешно активирован. Теперь Вы можете войти на сайт',
     'Page not found' => 'Запрашиваемая страница не найдена',
     '{attribute} is already taken' => '{attribute} уже занят',
+    'Activate code not found or expired' => 'Код активации не найден или просрочен',
 ];

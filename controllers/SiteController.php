@@ -151,7 +151,7 @@ class SiteController extends Controller
     {
         $model = Hash::findByHash($hash);
         if (!$model || $model->type != Hash::TYPE_ACTIVATE) {
-            throw new NotFoundHttpException('Activate code not found or expired');
+            throw new NotFoundHttpException(Yii::t('app', 'Activate code not found or expired'));
         }
 
         $model->used = 1;
