@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
  */
 class PanelController extends Controller
 {
-    public function behaviors()
+    /*public function behaviors()
     {
         return [
             'access' => [
@@ -27,7 +27,7 @@ class PanelController extends Controller
                 }
             ],
         ];
-    }
+    }*/
 
     /**
      * Renders the index view for the module

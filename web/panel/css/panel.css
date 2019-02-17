@@ -16,3 +16,30 @@
     bottom: 0;
     padding: 15px;
 }
+
+.tab-pane {
+    padding: 15px 0;
+}
+
+.img-thumbnail {
+    display: block;
+    width: 100%;
+    min-height: 150px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 15px;
+}
+
+.img-thumbnail .drop-image {
+    display: none;
+    float: right;
+}
+
+.img-thumbnail:hover .drop-image {
+    display: inline-block;
+}
+
+.margin-top {
+    margin-top: 15px;
+}

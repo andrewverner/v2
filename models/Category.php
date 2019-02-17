@@ -4,6 +4,9 @@ namespace app\models;
 
 use creocoder\nestedsets\NestedSetsBehavior;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "category".
@@ -14,8 +17,11 @@ use Yii;
  * @property int $rgt
  * @property int $depth
  * @property string $name
+ * @property string $created
+ * @property string $updated
+ * @property int $published
  */
-class Category extends \yii\db\ActiveRecord
+class Category extends ActiveRecord
 {
     public function behaviors() {
         return [
@@ -25,6 +31,14 @@ class Category extends \yii\db\ActiveRecord
                 // 'leftAttribute' => 'lft',
                 // 'rightAttribute' => 'rgt',
                 // 'depthAttribute' => 'depth',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated'],
+                ],
+                // if you're using datetime instead of UNIX timestamp:
+                'value' => new Expression('NOW()'),
             ],
         ];
     }
@@ -53,7 +67,7 @@ class Category extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['tree', 'lft', 'rgt', 'depth'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['tree', 'lft', 'rgt', 'depth'], 'safe'],
+            [['tree', 'lft', 'rgt', 'depth', 'published', 'created', 'updated'], 'safe'],
         ];
     }
 

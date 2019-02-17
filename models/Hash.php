@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\db\Expression;
 
 /**
@@ -19,7 +21,7 @@ use yii\db\Expression;
  *
  * @property User $user
  */
-class Hash extends \yii\db\ActiveRecord
+class Hash extends ActiveRecord
 {
     const TYPE_ACTIVATE = 1;
     const TYPE_RESET_PASSWORD = 2;
@@ -30,6 +32,20 @@ class Hash extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'hash';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated'],
+                ],
+                // if you're using datetime instead of UNIX timestamp:
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**

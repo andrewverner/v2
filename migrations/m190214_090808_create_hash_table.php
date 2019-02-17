@@ -20,7 +20,7 @@ class m190214_090808_create_hash_table extends Migration
             'expired_at' => $this->dateTime()->notNull(),
             'used' => $this->tinyInteger()->notNull()->defaultValue(0),
             'created' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
-            'updated' => $this->dateTime(),
+            'updated' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
         ], 'charset=utf8');
     }
 
