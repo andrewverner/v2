@@ -19,6 +19,8 @@ class MenuWidget extends Widget
             'Sizes' => '/panel/size',
             'Items' => '/panel/item',
             'Images' => '/panel/image',
+            'SEO' => '/panel/seo',
+            'Url manager' => '/panel/url-manager',
         ];
 
         return $this->render('menu', ['items' => $items]);

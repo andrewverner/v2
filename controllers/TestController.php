@@ -15,12 +15,13 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        $category = new Category(['name' => 'Корень']);
-        $category->makeRoot();
-        if ($category->validate()) {
-            $category->save();
-        } else {
-            print_r($category->errors);
-        }
+        $role = \Yii::$app->authManager->getRole('admin');
+        \Yii::$app->authManager->assign($role, 1);
+    }
+
+    public function actionSeo()
+    {
+        $category = Category::findOne(1);
+        var_dump($category->seo);
     }
 }

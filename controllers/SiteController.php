@@ -2,11 +2,11 @@
 
 namespace app\controllers;
 
+use app\components\Controller;
 use app\models\Hash;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;

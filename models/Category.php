@@ -20,6 +20,8 @@ use yii\db\Expression;
  * @property string $created
  * @property string $updated
  * @property int $published
+ *
+ * @property Seo $seo
  */
 class Category extends ActiveRecord
 {
@@ -101,5 +103,13 @@ class Category extends ActiveRecord
     public function getParentNode()
     {
         return $this->parents(1)->one();
+    }
+
+    /**
+     * @return Seo|null
+     */
+    public function getSeo()
+    {
+        return $this->hasOne(Seo::className(), ['entity_id' => 'id'])->andWhere(['entity_type' => 'category']);
     }
 }
