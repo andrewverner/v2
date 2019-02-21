@@ -8,8 +8,7 @@ use Yii;
  * This is the model class for table "seo".
  *
  * @property int $id
- * @property string $entity_type
- * @property int $entity_id
+ * @property string $url
  * @property string $title
  * @property string $keywords
  * @property string $description
@@ -33,11 +32,10 @@ class Seo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['entity_type', 'entity_id'], 'required'],
-            [['entity_id', 'active'], 'integer'],
+            [['url'], 'required'],
+            [['active'], 'integer'],
             [['created', 'updated'], 'safe'],
-            [['entity_type'], 'string', 'max' => 45],
-            [['title'], 'string', 'max' => 255],
+            [['url', 'title'], 'string', 'max' => 255],
             [['keywords', 'description'], 'string', 'max' => 1023],
         ];
     }
@@ -49,8 +47,7 @@ class Seo extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'entity_type' => Yii::t('app', 'Entity'),
-            'entity_id' => Yii::t('app', 'Entity ID'),
+            'url' => Yii::t('app', 'Url'),
             'title' => Yii::t('app', 'Title'),
             'keywords' => Yii::t('app', 'Keywords'),
             'description' => Yii::t('app', 'Description'),

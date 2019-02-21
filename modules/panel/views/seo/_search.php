@@ -20,15 +20,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'entity') ?>
-
-    <?= $form->field($model, 'entity_id') ?>
+    <?= $form->field($model, 'url') ?>
 
     <?= $form->field($model, 'title') ?>
 
     <?= $form->field($model, 'keywords') ?>
 
-    <?php // echo $form->field($model, 'description') ?>
+    <?= $form->field($model, 'description') ?>
 
     <?php // echo $form->field($model, 'active') ?>
 

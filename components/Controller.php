@@ -8,20 +8,12 @@
 
 namespace app\components;
 
-use app\models\Seo;
-
 class Controller extends \yii\web\Controller
 {
     public function beforeAction($action)
     {
-        \Yii::$app->getView()->registerMetaTag([
-            'name' => 'keywords',
-            'content' => 'some keywords',
-        ]);
-        \Yii::$app->getView()->registerMetaTag([
-            'name' => 'description',
-            'content' => 'Some description',
-        ]);
+        var_dump(\Yii::$app->request->getUrl());
+        var_dump(\Yii::$app->urlManager->getBaseUrl());
 
         return parent::beforeAction($action);
     }

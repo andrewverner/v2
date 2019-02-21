@@ -11,7 +11,7 @@ namespace app\controllers;
 use app\models\Category;
 use yii\web\Controller;
 
-class TestController extends Controller
+class TestController extends \app\components\Controller
 {
     public function actionIndex()
     {
@@ -22,6 +22,5 @@ class TestController extends Controller
     public function actionSeo()
     {
         $category = Category::findOne(1);
-        var_dump($category->seo);
     }
 }

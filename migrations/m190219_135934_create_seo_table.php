@@ -14,8 +14,7 @@ class m190219_135934_create_seo_table extends Migration
     {
         $this->createTable('{{%seo}}', [
             'id' => $this->primaryKey(),
-            'entity_type' => $this->string(45)->notNull(),
-            'entity_id' => $this->integer()->notNull(),
+            'url' => $this->string()->notNull(),
             'title' => $this->string(255),
             'keywords' => $this->string(1023),
             'description' => $this->string(1023),

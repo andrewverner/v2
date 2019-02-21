@@ -17,8 +17,8 @@ class SeoSearch extends Seo
     public function rules()
     {
         return [
-            [['id', 'entity_id', 'active'], 'integer'],
-            [['entity', 'title', 'keywords', 'description', 'created', 'updated'], 'safe'],
+            [['id', 'active'], 'integer'],
+            [['url', 'title', 'keywords', 'description', 'created', 'updated'], 'safe'],
         ];
     }
 
@@ -59,13 +59,12 @@ class SeoSearch extends Seo
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'entity_id' => $this->entity_id,
             'active' => $this->active,
             'created' => $this->created,
             'updated' => $this->updated,
         ]);
 
-        $query->andFilterWhere(['like', 'entity', $this->entity])
+        $query->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'keywords', $this->keywords])
             ->andFilterWhere(['like', 'description', $this->description]);
