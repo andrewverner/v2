@@ -12,9 +12,6 @@ class Controller extends \yii\web\Controller
 {
     public function beforeAction($action)
     {
-        var_dump(\Yii::$app->request->getUrl());
-        var_dump(\Yii::$app->urlManager->getBaseUrl());
-
         return parent::beforeAction($action);
     }
 }

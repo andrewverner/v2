@@ -16,7 +16,7 @@ class m190217_124504_create_size_table extends Migration
             'id' => $this->primaryKey(),
             'value' => $this->string(10),
             'created' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
 
         $this->insert('{{%size}}', ['value' => 'UN']);
     }

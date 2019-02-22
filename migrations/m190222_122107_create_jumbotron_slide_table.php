@@ -3,22 +3,22 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%seo}}`.
+ * Handles the creation of table `{{%jumbotron_slide}}`.
  */
-class m190219_135934_create_seo_table extends Migration
+class m190222_122107_create_jumbotron_slide_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%seo}}', [
+        $this->createTable('{{%jumbotron_slide}}', [
             'id' => $this->primaryKey(),
-            'url' => $this->string()->notNull(),
+            'image_id' => $this->integer()->notNull(),
+            'url' => $this->string(255),
             'title' => $this->string(255),
-            'keywords' => $this->string(1023),
-            'description' => $this->string(1023),
-            'active' => $this->tinyInteger()->notNull()->defaultValue(1),
+            'text' => $this->text(),
+            'active' => $this->tinyInteger(1)->notNull()->defaultValue(1),
             'created' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
             'updated' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
         ], 'charset=utf8');
@@ -29,6 +29,6 @@ class m190219_135934_create_seo_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%seo}}');
+        $this->dropTable('{{%jumbotron_slide}}');
     }
 }

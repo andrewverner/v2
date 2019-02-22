@@ -21,6 +21,11 @@ class MenuWidget extends Widget
             'Images' => '/panel/image',
             'SEO' => '/panel/seo',
             'Url manager' => '/panel/url-manager',
+            'Jumbotron' => '/panel/jumbotron-slide',
+            'Pages' => '/panel/page',
+            'Blocks' => '/panel/block',
+            'News' => '/panel/news',
+            'Users' => '/panel/user',
         ];
 
         return $this->render('menu', ['items' => $items]);
