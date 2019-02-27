@@ -19,8 +19,19 @@ class TestController extends \app\components\Controller
         \Yii::$app->authManager->assign($role, 1);
     }
 
-    public function actionSeo()
+    public function actionDiff()
     {
-        $category = Category::findOne(1);
+        $old = [
+            'a' => 1,
+            'b' => 2,
+        ];
+
+        $new = [
+            'a' => 1,
+            'b' => 3,
+        ];
+
+        print_r(array_diff_assoc($old, $new));
+        print_r(array_diff_assoc($new, $old));
     }
 }

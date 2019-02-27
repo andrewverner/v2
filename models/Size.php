@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\LogBehavior;
 use Yii;
 
 /**
@@ -13,6 +14,12 @@ use Yii;
  */
 class Size extends \yii\db\ActiveRecord
 {
+    public function behaviors() {
+        return [
+            LogBehavior::className(),
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -15,3 +15,7 @@
     </li>
     <?php endforeach; ?>
 </ul>
+
+<a class="btn btn-danger" href="<?= Yii::$app->urlManager->createUrl('/logout') ?>">
+    <i class="fas fa-sign-out-alt"></i> <?= Yii::t('app', 'Logout') ?>
+</a>

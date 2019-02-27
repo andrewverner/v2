@@ -62,6 +62,7 @@ $config = [
             'rules' => [
                 'sign-up' => 'site/sign-up',
                 'login' => 'site/login',
+                'logout' => 'site/logout',
                 'activate/<hash:\w+>' => 'site/activate',
             ],
         ],

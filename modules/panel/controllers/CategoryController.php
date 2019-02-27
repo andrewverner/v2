@@ -99,7 +99,8 @@ class CategoryController extends Controller
         }*/
 
         return $this->render('update', [
-            'model' => $formModel,
+            'model' => $model,
+            //'model' => $formModel,
         ]);
     }
 

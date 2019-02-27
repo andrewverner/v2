@@ -19,6 +19,7 @@ class MenuWidget extends Widget
             'Sizes' => '/panel/size',
             'Items' => '/panel/item',
             'Images' => '/panel/image',
+            'Menu' => '/panel/menu',
             'SEO' => '/panel/seo',
             'Url manager' => '/panel/url-manager',
             'Jumbotron' => '/panel/jumbotron-slide',
@@ -26,6 +27,7 @@ class MenuWidget extends Widget
             'Blocks' => '/panel/block',
             'News' => '/panel/news',
             'Users' => '/panel/user',
+            'Logs' => '/panel/log',
         ];
 
         return $this->render('menu', ['items' => $items]);

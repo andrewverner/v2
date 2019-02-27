@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\LogBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -35,12 +36,7 @@ class Category extends ActiveRecord
                 // 'depthAttribute' => 'depth',
             ],
             [
-                'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated'],
-                ],
-                // if you're using datetime instead of UNIX timestamp:
-                'value' => new Expression('NOW()'),
+                'class' => LogBehavior::className(),
             ],
         ];
     }
