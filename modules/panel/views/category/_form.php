@@ -4,24 +4,28 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model \app\modules\panel\models\CategoryForm */
+/* @var $model \app\models\Category $model */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="category-form">
+    <?php $form = ActiveForm::begin([
+        'id' => 'category-form',
+    ]); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'parent')->dropDownList($model->parentCategories()) ?>
+    <label><?= Yii::t('app', 'Parent  category'); ?></label>
+    <?= Html::dropDownList(
+        'parent',
+        $model->getParentNode()->id ?? null,
+        \yii\helpers\ArrayHelper::map(\app\models\Category::find()->all(), 'id', 'name'),
+        ['class' => 'form-control']
+    ); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    <div class="hidden">
+        <?= $form->field($model, 'id')->hiddenInput() ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>

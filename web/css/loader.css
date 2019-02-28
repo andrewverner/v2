@@ -1,0 +1,71 @@
+#loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.7);
+    visibility: hidden;
+    opacity: 0;
+    z-index: 5000;
+}
+
+#loader-container svg {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes rotation-1 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes rotation-2 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(719deg);
+    }
+}
+
+@keyframes rotation-3 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(1079deg);
+    }
+}
+
+@keyframes inverse-rotation {
+    from {
+        transform: rotate(719deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.rotate-1 {
+    animation: rotation-1 3s infinite linear;
+}
+.rotate-2 {
+    animation: rotation-2 5s infinite linear;
+    /*animation-delay: 1s;*/
+}
+.rotate-3 {
+    animation: rotation-3 7s infinite linear;
+    /*animation-delay: 2s;*/
+}

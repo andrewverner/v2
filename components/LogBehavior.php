@@ -34,7 +34,7 @@ class LogBehavior extends Behavior
         $log->entity = get_class($event->sender);
         $log->event_type = 'insert';
         $log->user_id = \Yii::$app->user->id;
-        $log->new_attributes = json_encode($event->sender->attributes);
+        $log->new_attributes = json_encode(array_filter($event->sender->attributes));
         $log->save();
     }
 
@@ -44,8 +44,8 @@ class LogBehavior extends Behavior
             return;
         }
 
-        $oldData = array_diff_assoc($event->sender->oldAttributes, $event->sender->attributes);
-        $newData = array_diff_assoc($event->sender->attributes, $event->sender->oldAttributes);
+        $oldData = array_filter(array_diff_assoc($event->sender->oldAttributes, $event->sender->attributes));
+        $newData = array_filter(array_diff_assoc($event->sender->attributes, $event->sender->oldAttributes));
 
         if (!$oldData || !$newData) {
             return;
@@ -74,7 +74,7 @@ class LogBehavior extends Behavior
         $log->entity = get_class($event->sender);
         $log->event_type = 'delete';
         $log->user_id = \Yii::$app->user->id;
-        $log->old_attributes = json_encode($event->sender->attributes);
+        $log->old_attributes = json_encode(array_filter($event->sender->attributes));
         $log->save();
     }
 }

@@ -2,12 +2,11 @@
 
 namespace app\modules\panel\controllers;
 
-use app\modules\panel\models\CategoryForm;
 use Yii;
 use app\models\Category;
 use app\models\CategorySearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
@@ -15,6 +14,14 @@ use yii\filters\VerbFilter;
  */
 class CategoryController extends Controller
 {
+    public function init()
+    {
+        Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Categories' => '/panel/category',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -24,7 +31,8 @@ class CategoryController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'form' => ['POST'],
+                    'save' => ['POST', 'AJAX'],
                 ],
             ],
         ];
@@ -45,92 +53,21 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Category model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
+    public function actionForm()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $id = Yii::$app->request->post('id');
+        $model = $id ? Category::findOne($id) : new Category();
+
+        return $this->renderPartial('_form', ['model' => $model]);
     }
 
-    /**
-     * Creates a new Category model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
+    public function actionSave()
     {
-        $model = new CategoryForm();
+        $id = ArrayHelper::getValue(Yii::$app->request->post('Category'), 'id');
+        $model = $id ? Category::findOne($id) : new Category(Yii::$app->request->post('Category'));
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $parent = Category::findOne($model->parent);
-            $category = new Category(['name' => $model->name]);
-            $category->appendTo($parent);
-            //return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Category model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-        $formModel = (new CategoryForm())->load([
-            'name' => $model->name,
-            'parent' => $model->getParentNode()->id,
-        ]);
-
-        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }*/
-
-        return $this->render('update', [
-            'model' => $model,
-            //'model' => $formModel,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Category model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Category model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Category the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Category::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        $parentId = Yii::$app->request->post('parent');
+        $parent = Category::findOne($parentId);
+        $model->appendTo($parent);
     }
 }

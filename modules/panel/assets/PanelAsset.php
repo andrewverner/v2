@@ -10,10 +10,12 @@ namespace app\modules\panel\assets;
 
 class PanelAsset extends \yii\web\AssetBundle
 {
-    public $baseUrl = '@web/panel';
-
     public $css = [
-        'css/panel.css',
+        'panel/css/panel.css',
+    ];
+
+    public $js = [
+        'panel/js/alert.js',
     ];
 
     public $depends = [
