@@ -16,6 +16,7 @@ class PanelAsset extends \yii\web\AssetBundle
 
     public $js = [
         'panel/js/alert.js',
+        'panel/js/panel.js',
     ];
 
     public $depends = [

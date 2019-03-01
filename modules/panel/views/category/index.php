@@ -61,6 +61,16 @@ $this->title = Yii::t('app', 'Categories');
                                         [
                                             'class' => 'mf-grid-control-btn delete-category',
                                             'data-id' => $category['id'],
+                                            'data-confirm' => Yii::t('app', 'Drop category {name}?', ['name' => $category['name']]),
+                                            'data-class' => 'modal-danger',
+                                            'data-type' => 'post',
+                                            'data-title' => Yii::t('app', 'Удалить категорию?'),
+                                            'data-pjax' => '#categories-pjax',
+                                            'data-message' => Yii::t('app', 'Category has been dropped'),
+                                            'data-url' => Yii::$app->urlManager->createUrl([
+                                                '/panel/category/drop',
+                                                'id' => $category['id']
+                                            ]),
                                         ]
                                     ),
                                 ]);

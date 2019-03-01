@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%log}}`.
  */
-class m190222_165848_create_log_table extends Migration
+class m190214_070920_create_log_table extends Migration
 {
     /**
      * {@inheritdoc}
