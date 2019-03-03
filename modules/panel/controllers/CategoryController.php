@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -56,9 +57,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function actionForm()
+    public function actionForm($id = null)
     {
-        $id = Yii::$app->request->post('id');
         $model = $id ? Category::findOne($id) : new Category();
 
         return $this->renderPartial('_form', ['model' => $model]);
@@ -77,8 +77,12 @@ class CategoryController extends Controller
         $model->appendTo($parent);
     }
 
-    public function actionDrop()
+    public function actionDrop($id)
     {
+        if (!$model = Category::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Category not found'));
+        }
 
+        $model->deleteWithChildren();
     }
 }

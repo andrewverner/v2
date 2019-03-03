@@ -10,12 +10,15 @@ use yii\widgets\ActiveForm;
 
 <div class="size-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'action' => Yii::$app->urlManager->createUrl('/panel/size/save'),
+        'method' => 'post',
+    ]); ?>
 
     <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    <div class="hidden">
+        <?= $form->field($model, 'id')->textInput() ?>
     </div>
 
     <?php ActiveForm::end(); ?>

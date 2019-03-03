@@ -10,7 +10,9 @@ use yii\widgets\ActiveForm;
 
 <div class="category-form">
     <?php $form = ActiveForm::begin([
-        'id' => 'category-form',
+        'id' => 'model-form',
+        'method' => 'post',
+        'action' => Yii::$app->urlManager->createUrl('/panel/category/save'),
     ]); ?>
 
     <label><?= Yii::t('app', 'Parent  category'); ?></label>

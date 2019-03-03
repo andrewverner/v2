@@ -5,6 +5,9 @@ namespace app\modules\panel\controllers;
 use Yii;
 use app\models\Size;
 use app\modules\panel\models\SizeSearch;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,7 +26,9 @@ class SizeController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'form' => ['POST', 'AJAX'],
+                    'save' => ['POST', 'AJAX'],
+                    'drop' => ['POST', 'AJAX'],
                 ],
             ],
         ];
@@ -44,84 +49,31 @@ class SizeController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Size model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
+    public function actionForm($id = null)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $id ? Size::findOne($id) : new Size();
+
+        return $this->renderPartial('_form', ['model' => $model]);
     }
 
-    /**
-     * Creates a new Size model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
+    public function actionSave()
     {
-        $model = new Size();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('index');
+        $id = ArrayHelper::getValue(Yii::$app->request->post('Size'), 'id');
+        $model = $id ? Size::findOne($id) : new Size();
+        $model->load(Yii::$app->request->post());
+        if (!$model->validate()) {
+            throw new BadRequestHttpException(Html::ul($model->getErrorSummary(true)));
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        $model->save();
     }
 
-    /**
-     * Updates an existing Size model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionDrop($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (!$model = Size::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Size not found'));
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Size model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Size model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Size the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Size::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        $model->delete();
     }
 }

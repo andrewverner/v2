@@ -16,7 +16,6 @@ $this->title = Yii::t('app', 'Sizes');
 
 ?>
 <div class="size-index">
-
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="box">
@@ -25,7 +24,9 @@ $this->title = Yii::t('app', 'Sizes');
                     <div class="box-tools text-right">
                         <div class="input-group input-group-sm" style="width: 150px;">
                             <div class="input-group-btn">
-                                <span class="btn btn-default btn-sm" id="new-model">
+                                <span class="btn btn-default btn-sm" data-get-form data-type="post" data-pjax="#sizes-pjax"
+                                    data-url="<?= Yii::$app->urlManager->createUrl('/panel/size/form'); ?>"
+                                    data-msg="<?= Yii::t('app', 'Size has been saved'); ?>">
                                     <i class="fas fa-plus"></i> <?= Yii::t('app', 'Add size'); ?>
                                 </span>
                             </div>
@@ -42,6 +43,46 @@ $this->title = Yii::t('app', 'Sizes');
                             'id',
                             'value',
                             'created',
+                            [
+                                'label' => '',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return implode('', [
+                                        \yii\helpers\Html::tag(
+                                            'span',
+                                            '<i class="fas fa-edit"></i>',
+                                            [
+                                                'class' => 'mf-grid-control-btn',
+                                                'data-id' => $model['id'],
+                                                'data-loader' => '',
+                                                'data-get-form' => '',
+                                                'data-type' => 'post',
+                                                'data-url' => Yii::$app->urlManager->createUrl('/panel/size/form'),
+                                                'data-pjax' => '#sizes-pjax',
+                                                'data-msg' => Yii::t('app', 'Size has been saved'),
+                                            ]
+                                        ),
+                                        \yii\helpers\Html::tag(
+                                            'span',
+                                            '<i class="far fa-trash-alt"></i>',
+                                            [
+                                                'class' => 'mf-grid-control-btn',
+                                                'data-id' => $model['id'],
+                                                'data-confirm' => Yii::t('app', 'Drop size {name}?', ['name' => $model['value']]),
+                                                'data-modal-type' => 'modal-danger',
+                                                'data-type' => 'post',
+                                                'data-title' => Yii::t('app', 'Delete size?'),
+                                                'data-pjax' => '#sizes-pjax',
+                                                'data-message' => Yii::t('app', 'Size has been dropped'),
+                                                'data-url' => Yii::$app->urlManager->createUrl([
+                                                    '/panel/size/drop',
+                                                    'id' => $model['id']
+                                                ]),
+                                            ]
+                                        ),
+                                    ]);
+                                },
+                            ]
                         ],
                     ]); ?>
                     <?php Pjax::end(); ?>
@@ -50,29 +91,3 @@ $this->title = Yii::t('app', 'Sizes');
         </div>
     </div>
 </div>
-
-<?php \app\modules\panel\widgets\ModalWidget::begin([
-    'title' => Yii::t('app', 'Size'),
-    'id' => 'model-form-modal',
-    'buttons' => [
-        new \app\modules\panel\widgets\ModalButtonWidget([
-            'title' => Yii::t('app', 'Cancel'),
-            'options' => [
-                'data-dismiss' => 'modal',
-                'class' => 'btn pull-left',
-            ],
-        ]),
-        new \app\modules\panel\widgets\ModalButtonWidget([
-            'title' => Yii::t('app', 'Save'),
-            'options' => [
-                'class' => 'btn btn-primary',
-                'id' => 'save-model-btn',
-                'data-loader' => '',
-            ],
-        ]),
-    ],
-]); ?>
-<p id="model-form-container">
-
-</p>
-<?php \app\modules\panel\widgets\ModalWidget::end(); ?>
