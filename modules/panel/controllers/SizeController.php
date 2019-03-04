@@ -17,6 +17,14 @@ use yii\filters\VerbFilter;
  */
 class SizeController extends Controller
 {
+    public function init()
+    {
+        Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Sizes' => '/panel/size',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -49,8 +57,9 @@ class SizeController extends Controller
         ]);
     }
 
-    public function actionForm($id = null)
+    public function actionForm()
     {
+        $id = Yii::$app->request->post('id');
         $model = $id ? Size::findOne($id) : new Size();
 
         return $this->renderPartial('_form', ['model' => $model]);

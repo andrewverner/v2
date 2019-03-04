@@ -160,25 +160,42 @@ $(function () {
         });
 
         $($modal).on('click', '#confirm-modal-yes', function (e) {
-            $.ajax({
-                url: $el.data('url'),
-                type: $el.data('type'),
-                success: function() {
-                    $modal.modal('hide');
-                    if ($el.data('msg')) {
-                        $.alert.success($el.data('msg'));
+            var requestType = getValue($el.data('request-type'), 'ajax');
+
+            if (requestType === 'ajax') {
+                $.ajax({
+                    url: $el.data('url'),
+                    type: $el.data('type'),
+                    success: function() {
+                        $modal.modal('hide');
+                        if ($el.data('msg')) {
+                            $.alert.success($el.data('msg'));
+                        }
+                        if ($el.data('pjax')) {
+                            $.pjax.reload({container: $el.data('pjax')});
+                        }
+                    },
+                    error: function(data) {
+                        $.alert.error(data.responseText);
+                    },
+                    complete: function () {
+                        $.loader.hide();
                     }
-                    if ($el.data('pjax')) {
-                        $.pjax.reload({container: $el.data('pjax')});
-                    }
-                },
-                error: function(data) {
-                    $.alert.error(data.responseText);
-                },
-                complete: function () {
-                    $.loader.hide();
-                }
-            });
+                });
+            } else {
+                var csrfToken = $('meta[name="csrf-token"]').attr('content'),
+                    $form = $('<form></form>').attr({
+                    method: getValue($el.data('type'), 'post'),
+                    action: $el.data('url'),
+                });
+
+                $form.append($('<input />').attr({
+                    type:
+                }));
+
+                $('body').append($form);
+                $form.submit();
+            }
 
             e.stopImmediatePropagation();
         });

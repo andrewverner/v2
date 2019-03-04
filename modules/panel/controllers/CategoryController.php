@@ -34,7 +34,7 @@ class CategoryController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'form' => ['POST'],
+                    'form' => ['POST', 'AJAX'],
                     'save' => ['POST', 'AJAX'],
                     'drop' => ['POST', 'AJAX'],
                 ],
@@ -57,8 +57,9 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function actionForm($id = null)
+    public function actionForm()
     {
+        $id = Yii::$app->request->post('id');
         $model = $id ? Category::findOne($id) : new Category();
 
         return $this->renderPartial('_form', ['model' => $model]);
@@ -67,7 +68,8 @@ class CategoryController extends Controller
     public function actionSave()
     {
         $id = ArrayHelper::getValue(Yii::$app->request->post('Category'), 'id');
-        $model = $id ? Category::findOne($id) : new Category(Yii::$app->request->post('Category'));
+        $model = $id ? Category::findOne($id) : new Category();
+        $model->load(Yii::$app->request->post());
         if (!$model->validate()) {
             throw new BadRequestHttpException(Html::ul($model->getErrorSummary(true)));
         }

@@ -44,15 +44,20 @@ $this->title = Yii::t('app', 'Categories');
                         [
                             'label' => '',
                             'format' => 'raw',
-                            'value' => function ($category) {
+                            'value' => function ($model) {
                                 return implode('', [
                                     \yii\helpers\Html::tag(
                                         'span',
                                         '<i class="fas fa-edit"></i>',
                                         [
                                             'class' => 'mf-grid-control-btn edit-category',
-                                            'data-id' => $category['id'],
+                                            'data-id' => $model['id'],
                                             'data-loader' => '',
+                                            'data-get-form' => '',
+                                            'data-url' => Yii::$app->urlManager->createUrl('/panel/category/form'),
+                                            'data-type' => 'post',
+                                            'data-pjax' => '#categories-pjax',
+                                            'data-msg' => Yii::t('app', 'Category has been saved'),
                                         ]
                                     ),
                                     \yii\helpers\Html::tag(
@@ -60,8 +65,8 @@ $this->title = Yii::t('app', 'Categories');
                                         '<i class="far fa-trash-alt"></i>',
                                         [
                                             'class' => 'mf-grid-control-btn delete-category',
-                                            'data-id' => $category['id'],
-                                            'data-confirm' => Yii::t('app', 'Drop category {name}?', ['name' => $category['name']]),
+                                            'data-id' => $model['id'],
+                                            'data-confirm' => Yii::t('app', 'Drop category {name}?', ['name' => $model['name']]),
                                             'data-modal-type' => 'modal-danger',
                                             'data-type' => 'post',
                                             'data-title' => Yii::t('app', 'Удалить категорию?'),
@@ -69,7 +74,7 @@ $this->title = Yii::t('app', 'Categories');
                                             'data-message' => Yii::t('app', 'Category has been dropped'),
                                             'data-url' => Yii::$app->urlManager->createUrl([
                                                 '/panel/category/drop',
-                                                'id' => $category['id']
+                                                'id' => $model['id']
                                             ]),
                                         ]
                                     ),

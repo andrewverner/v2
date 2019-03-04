@@ -9,18 +9,31 @@
  */
 
 use \yii\widgets\DetailView;
-use yii\helpers\Html;
 ?>
 
-<p>
-    <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-        'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-            'method' => 'post',
-        ],
-    ]) ?>
+<p class="pull-right">
+    <?= \yii\helpers\Html::a(
+        '<i class="fas fa-edit"></i> ' . Yii::t('app', 'Edit'),
+        Yii::$app->urlManager->createUrl([
+            '/panel/item/update',
+            'id' => $model->id,
+        ]),
+        ['class' => 'btn btn-primary btn-sm']
+    ); ?>
+    <?= \yii\helpers\Html::tag(
+        'span',
+        '<i class="far fa-trash-alt"></i> ' . Yii::t('app', 'Delete'),
+        [
+            'class' => 'btn btn-danger btn-sm',
+            'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+            'data-request-type' => 'non-ajax',
+            'data-modal-type' => 'modal-danger',
+            'data-url' => Yii::$app->urlManager->createUrl([
+                '/panel/item/drop',
+                'id' => $model->id,
+            ])
+        ]
+    ); ?>
 </p>
 
 <?= DetailView::widget([

@@ -24,6 +24,14 @@ use yii\imagine\Image;
  */
 class ItemController extends Controller
 {
+    public function init()
+    {
+        Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Items' => '/panel/item',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +41,7 @@ class ItemController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'drop' => ['POST'],
                     'add-category' => ['POST', 'AJAX'],
                     'drop-category' => ['POST', 'AJAX'],
                     'add-size' => ['POST', 'AJAX'],
@@ -113,17 +121,19 @@ class ItemController extends Controller
     }
 
     /**
-     * Deletes an existing Item model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDrop($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(Yii::$app->urlManager->createUrl('/panel/item'));
+        }
     }
 
     /**

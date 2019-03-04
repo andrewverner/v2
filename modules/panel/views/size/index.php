@@ -6,18 +6,16 @@
 
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use app\modules\panel\assets\SizeAsset;
 use kartik\select2\Select2Asset;
 
 Select2Asset::register($this);
-SizeAsset::register($this);
 
 $this->title = Yii::t('app', 'Sizes');
 
 ?>
 <div class="size-index">
     <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><?= Yii::t('app', 'Sizes'); ?></h3>
