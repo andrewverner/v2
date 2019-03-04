@@ -32,7 +32,7 @@ PanelAsset::register($this);
 
         <a href="<?= Yii::$app->urlManager->createUrl('/panel/panel'); ?>" class="logo">
             <span class="logo-mini"><b>MF</b></span>
-            <span class="logo-lg"><b>Motoflame</b>admin</span>
+            <span class="logo-lg"><b>Motoflame</b>Admin</span>
         </a>
 
         <nav class="navbar navbar-static-top" role="navigation">

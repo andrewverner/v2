@@ -182,16 +182,9 @@ class ItemController extends Controller
         return true;
     }
 
-    public function actionDropCategory()
+    public function actionDropCategory($id)
     {
-        $relId = Yii::$app->request->post('relId');
-
-        if (!$relId) {
-            return false;
-        }
-
-        $rel = ItemCategory::findOne($relId);
-        if (!$rel) {
+        if (!$rel = ItemCategory::findOne($id)) {
             return false;
         }
 
@@ -293,5 +286,14 @@ class ItemController extends Controller
         }
 
         return '';
+    }
+
+    public function actionCategoriesForm($id)
+    {
+        if (!$model = Item::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Item not found'));
+        }
+
+        return $this->renderPartial('_categories-form', ['model' => $model]);
     }
 }

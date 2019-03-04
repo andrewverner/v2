@@ -95,6 +95,7 @@ $(function () {
                 ]);
 
                 $('body').append($modal);
+                $('.select2').select2();
                 $modal.modal('show');
 
                 $modal.on('hidden.bs.modal', function () {
@@ -183,15 +184,15 @@ $(function () {
                     }
                 });
             } else {
-                var csrfToken = $('meta[name="csrf-token"]').attr('content'),
-                    $form = $('<form></form>').attr({
+                var $form = $('<form></form>').attr({
                     method: getValue($el.data('type'), 'post'),
                     action: $el.data('url'),
                 });
 
                 $form.append($('<input />').attr({
-                    type:
-                }));
+                    type: 'hidden',
+                    name: yii.getCsrfParam(),
+                }).val(yii.getCsrfToken()));
 
                 $('body').append($form);
                 $form.submit();

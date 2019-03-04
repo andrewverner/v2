@@ -57,7 +57,7 @@ $this->title = Yii::t('app', 'Items');
                                         'data-type' => 'post',
                                         'data-title' => Yii::t('app', 'Delete item?'),
                                         'data-pjax' => '#items-pjax',
-                                        'data-message' => Yii::t('app', 'Item has been dropped'),
+                                        'data-msg' => Yii::t('app', 'Item has been dropped'),
                                         'data-url' => Yii::$app->urlManager->createUrl([
                                             '/panel/item/drop',
                                             'id' => $model['id']

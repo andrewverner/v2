@@ -71,7 +71,7 @@ $this->title = Yii::t('app', 'Sizes');
                                                 'data-type' => 'post',
                                                 'data-title' => Yii::t('app', 'Delete size?'),
                                                 'data-pjax' => '#sizes-pjax',
-                                                'data-message' => Yii::t('app', 'Size has been dropped'),
+                                                'data-msg' => Yii::t('app', 'Size has been dropped'),
                                                 'data-url' => Yii::$app->urlManager->createUrl([
                                                     '/panel/size/drop',
                                                     'id' => $model['id']

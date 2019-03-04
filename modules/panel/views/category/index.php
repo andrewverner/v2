@@ -71,7 +71,7 @@ $this->title = Yii::t('app', 'Categories');
                                             'data-type' => 'post',
                                             'data-title' => Yii::t('app', 'Удалить категорию?'),
                                             'data-pjax' => '#categories-pjax',
-                                            'data-message' => Yii::t('app', 'Category has been dropped'),
+                                            'data-msg' => Yii::t('app', 'Category has been dropped'),
                                             'data-url' => Yii::$app->urlManager->createUrl([
                                                 '/panel/category/drop',
                                                 'id' => $model['id']

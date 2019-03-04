@@ -14,23 +14,7 @@ $(function () {
             },
             success: function () {
                 $('#categoryModal').modal('hide');
-                $('#item-category').val(null).trigger('change');
-                $.pjax.reload({container: '#category-pjax'});
-            },
-            error: function () {
-
-            }
-        });
-    });
-
-    $(document).on('click', '.drop-item-category', function () {
-        $.ajax({
-            url: '/panel/item/drop-category',
-            type: 'post',
-            data: {
-                relId: $(this).data('id')
-            },
-            success: function () {
+                //$('#item-category').val(null).trigger('change');
                 $.pjax.reload({container: '#category-pjax'});
             },
             error: function () {
