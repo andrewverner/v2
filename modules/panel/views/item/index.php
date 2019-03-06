@@ -31,7 +31,16 @@ $this->title = Yii::t('app', 'Items');
                 'filterModel' => $searchModel,
                 'columns' => [
                     'id',
-                    'title',
+                    [
+                        'label' => Yii::t('app', 'Title'),
+                        'format' => 'html',
+                        'value' => function ($model) {
+                            return Html::a($model['title'], Yii::$app->urlManager->createUrl([
+                                '/panel/item/view',
+                                'id' => $model['id'],
+                            ]));
+                        }
+                    ],
                     'price',
                     [
                         'label' => '',
