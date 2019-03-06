@@ -8,22 +8,21 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="url-manager-form">
+<div class="seo-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'action' => Yii::$app->urlManager->createUrl('/panel/url-manager/save'),
+        'method' => 'post',
+    ]) ?>
 
-    <?= $form->field($model, 'pattern')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'pattern')->textInput() ?>
 
-    <?= $form->field($model, 'route')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'route')->textInput() ?>
 
-    <?= $form->field($model, 'active')->textInput() ?>
+    <?= $form->field($model, 'active')->checkbox() ?>
 
-    <?= $form->field($model, 'created')->textInput() ?>
-
-    <?= $form->field($model, 'updated')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    <div class="hidden">
+        <?= $form->field($model, 'id')->textInput() ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -55,4 +55,13 @@ class Menu extends \yii\db\ActiveRecord
             'weight' => Yii::t('app', 'Weight'),
         ];
     }
+
+    public function beforeValidate()
+    {
+        if (!$this->weight) {
+            $this->weight = 0;
+        }
+
+        return parent::beforeValidate();
+    }
 }

@@ -2,9 +2,11 @@
 
 namespace app\modules\panel\controllers;
 
-use Yii;
 use app\models\Seo;
-use app\modules\panel\models\SeoSearch;
+use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,6 +16,14 @@ use yii\filters\VerbFilter;
  */
 class SeoController extends Controller
 {
+    public function init()
+    {
+        \Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Seo' => '/panel/seo',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,105 +33,52 @@ class SeoController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'form' => ['POST', 'AJAX'],
+                    'save' => ['POST', 'AJAX'],
+                    'drop' => ['POST', 'AJAX'],
                 ],
             ],
         ];
     }
 
-    /**
-     * Lists all Seo models.
-     * @return mixed
-     */
     public function actionIndex()
     {
-        $searchModel = new SeoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => new ActiveDataProvider([
+                'query' => Seo::find(),
+                'pagination' => [
+                    'pageSize' => 25,
+                ],
+            ]),
         ]);
     }
 
-    /**
-     * Displays a single Seo model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
+    public function actionForm()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $id = \Yii::$app->request->post('id');
+        $model = $id ? Seo::findOne($id) : new Seo();
+
+        return $this->renderPartial('_form', ['model' => $model]);
     }
 
-    /**
-     * Creates a new Seo model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
+    public function actionSave()
     {
-        $model = new Seo();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $id = ArrayHelper::getValue(\Yii::$app->request->post('Seo'), 'id');
+        $model = $id ? Seo::findOne($id) : new Seo();
+        $model->load(\Yii::$app->request->post());
+        if (!$model->validate()) {
+            throw new BadRequestHttpException(Html::ul($model->getErrorSummary(true)));
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        $model->save();
     }
 
-    /**
-     * Updates an existing Seo model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionDrop($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (!$model = Seo::findOne($id)) {
+            throw new NotFoundHttpException(\Yii::t('app', 'Seo record not found'));
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Seo model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Seo model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Seo the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Seo::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        $model->delete();
     }
 }
