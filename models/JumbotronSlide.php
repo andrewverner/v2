@@ -15,6 +15,8 @@ use Yii;
  * @property int $active
  * @property string $created
  * @property string $updated
+ *
+ * @property Image $image
  */
 class JumbotronSlide extends \yii\db\ActiveRecord
 {
@@ -32,7 +34,7 @@ class JumbotronSlide extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image_id'], 'required'],
+            [['title'], 'required'],
             [['image_id', 'active'], 'integer'],
             [['text'], 'string'],
             [['created', 'updated'], 'safe'],
@@ -55,5 +57,10 @@ class JumbotronSlide extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public function getImage()
+    {
+        return $this->hasOne(Image::class, ['id' => 'image_id']);
     }
 }

@@ -8,16 +8,20 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Update Jumbotron Slide: {name}', [
     'name' => $model->title,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Jumbotron Slides'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+
+$this->params['breadcrumbs'][$model->title] = Yii::$app->urlManager->createUrl([
+    '/panel/jumbotron-slide/update',
+    'id' => $model->id,
+]);
 ?>
 <div class="jumbotron-slide-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <?php \app\modules\panel\widgets\BoxWidget::begin(['title' => $model->title]); ?>
+                <?= $this->render('_form', [
+                    'model' => $model,
+                ]) ?>
+            <?php \app\modules\panel\widgets\BoxWidget::end(); ?>
+        </div>
+    </div>
 </div>

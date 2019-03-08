@@ -14,7 +14,7 @@ class m190222_122107_create_jumbotron_slide_table extends Migration
     {
         $this->createTable('{{%jumbotron_slide}}', [
             'id' => $this->primaryKey(),
-            'image_id' => $this->integer()->notNull(),
+            'image_id' => $this->integer(),
             'url' => $this->string(255),
             'title' => $this->string(255),
             'text' => $this->text(),

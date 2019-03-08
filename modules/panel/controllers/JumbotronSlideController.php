@@ -2,9 +2,13 @@
 
 namespace app\modules\panel\controllers;
 
+use app\modules\panel\models\UploadModel;
 use Yii;
 use app\models\JumbotronSlide;
 use app\modules\panel\models\JumbotronSlideSearch;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,6 +18,14 @@ use yii\filters\VerbFilter;
  */
 class JumbotronSlideController extends Controller
 {
+    public function init()
+    {
+        Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Jumbotron' => '/panel/jumbotron-slide',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,14 +35,15 @@ class JumbotronSlideController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'save' => ['POST', 'AJAX'],
+                    'drop' => ['POST', 'AJAX'],
                 ],
             ],
         ];
     }
 
     /**
-     * Lists all JumbotronSlide models.
+     * Lists all Jumbotron slides models.
      * @return mixed
      */
     public function actionIndex()
@@ -45,20 +58,43 @@ class JumbotronSlideController extends Controller
     }
 
     /**
-     * Displays a single JumbotronSlide model.
+     * Displays a single Item model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $this->view->registerJsVar('slideId', $id);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => JumbotronSlide::findOne($id),
+            'uploadModel' => new UploadModel(),
         ]);
     }
 
     /**
-     * Creates a new JumbotronSlide model.
+     * Updates an existing Item model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
+    {
+        $model = JumbotronSlide::findOne($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Creates a new Item model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -75,53 +111,24 @@ class JumbotronSlideController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing JumbotronSlide model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionSave()
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $id = ArrayHelper::getValue(Yii::$app->request->post('JumbotronSlide'), 'id');
+        $model = $id ? JumbotronSlide::findOne($id) : new JumbotronSlide();
+        $model->load(Yii::$app->request->post());
+        if (!$model->validate()) {
+            throw new BadRequestHttpException(Html::ul($model->getErrorSummary(true)));
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        $model->save();
     }
 
-    /**
-     * Deletes an existing JumbotronSlide model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
+    public function actionDrop($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the JumbotronSlide model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return JumbotronSlide the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = JumbotronSlide::findOne($id)) !== null) {
-            return $model;
+        if (!$model = JumbotronSlide::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Jumbotron slide not found'));
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        $model->delete();
     }
 }
