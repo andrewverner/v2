@@ -3,9 +3,14 @@
 namespace app\controllers;
 
 use app\components\Controller;
+use app\models\Category;
 use app\models\Hash;
+use app\models\Item;
+use app\models\ItemCategory;
 use app\models\User;
 use Yii;
+use yii\data\Pagination;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -164,5 +169,32 @@ class SiteController extends Controller
         Yii::$app->session->setFlash('success', Yii::t('app', 'Your account has been activated successfully. Now you can sign in'));
 
         return $this->redirect(Yii::$app->urlManager->createUrl('/login'));
+    }
+
+    public function actionCategory($id)
+    {
+        $category = Category::findOne($id);
+
+        if (!$category || !$category->published) {
+            throw new NotFoundHttpException(Yii::t('app', 'Category not found'));
+        }
+
+        $query = Item::find()
+            ->from(Item::tableName() . ' i')
+            ->innerJoin(ItemCategory::tableName() . ' ic', 'ic.item_id = i.id')
+            ->innerJoin(Category::tableName() . ' c', 'c.id = ic.category_id')
+            ->where('c.published = 1')
+            ->groupBy('i.id');
+        $countQuery = clone $query;
+
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('category', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
     }
 }

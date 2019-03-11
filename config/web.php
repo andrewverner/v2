@@ -64,6 +64,7 @@ $config = [
                 'login' => 'site/login',
                 'logout' => 'site/logout',
                 'activate/<hash:\w+>' => 'site/activate',
+                'category/<id:\d+>' => 'site/category',
             ],
         ],
         'i18n' => [
