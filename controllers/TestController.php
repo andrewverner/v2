@@ -13,25 +13,8 @@ use yii\web\Controller;
 
 class TestController extends \app\components\Controller
 {
-    public function actionIndex()
+    public function actionDadata()
     {
-        $role = \Yii::$app->authManager->getRole('admin');
-        \Yii::$app->authManager->assign($role, 1);
-    }
-
-    public function actionDiff()
-    {
-        $old = [
-            'a' => 1,
-            'b' => 2,
-        ];
-
-        $new = [
-            'a' => 1,
-            'b' => 3,
-        ];
-
-        print_r(array_diff_assoc($old, $new));
-        print_r(array_diff_assoc($new, $old));
+        return $this->render('dadata');
     }
 }

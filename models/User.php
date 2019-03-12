@@ -15,6 +15,13 @@ use yii\web\IdentityInterface;
  * @property int $active
  * @property int $blocked
  * @property string $created
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $middle_name
+ * @property string $phone
+ *
+ * @property Order[] $orders
+ * @property UserAddress[] $addresses
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -35,7 +42,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['username', 'password'], 'required'],
             [['active', 'blocked'], 'integer'],
             [['created'], 'safe'],
-            [['username', 'email'], 'string', 'max' => 45],
+            [['username', 'email', 'first_name', 'last_name' ,'middle_name' ,'phone'], 'string', 'max' => 45],
             [['password'], 'string', 'max' => 255],
             [['username', 'email'], 'checkForUnique']
         ];
@@ -68,6 +75,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'active' => Yii::t('app', 'Active'),
             'blocked' => Yii::t('app', 'Blocked'),
             'created' => Yii::t('app', 'Created'),
+            'first_name' => Yii::t('app', 'First name'),
+            'last_name' => Yii::t('app', 'Last name'),
+            'middle_name' => Yii::t('app', 'Middle name'),
+            'phone' => Yii::t('app', 'Phone'),
         ];
     }
 
@@ -121,5 +132,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password);
+    }
+
+    public function getOrders()
+    {
+        return $this->hasMany(Order::class, ['user_id' => 'id']);
+    }
+
+    public function getAddresses()
+    {
+        return $this->hasMany(UserAddress::class, ['user_id' => 'id']);
     }
 }
