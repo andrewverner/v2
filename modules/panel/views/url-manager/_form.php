@@ -15,9 +15,13 @@ use yii\widgets\ActiveForm;
         'method' => 'post',
     ]) ?>
 
-    <?= $form->field($model, 'pattern')->textInput() ?>
+    <?= $form->field($model, 'pattern', [
+        'template' => '{label}<div class="input-group"><span class="input-group-addon">' . \yii\helpers\Url::home(true) . '</span>{input}</div>{error}{hint}'
+    ])->textInput() ?>
 
-    <?= $form->field($model, 'route')->textInput() ?>
+    <?= $form->field($model, 'route', [
+        'template' => '{label}<div class="input-group"><span class="input-group-addon">' . \yii\helpers\Url::home(true) . '</span>{input}</div>{error}{hint}'
+    ])->textInput() ?>
 
     <?= $form->field($model, 'active')->checkbox() ?>
 

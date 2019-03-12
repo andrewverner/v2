@@ -15,7 +15,9 @@ use yii\widgets\ActiveForm;
         'method' => 'post',
     ]) ?>
 
-    <?= $form->field($model, 'url')->textInput() ?>
+    <?= $form->field($model, 'url', [
+        'template' => '{label}<div class="input-group"><span class="input-group-addon">' . \yii\helpers\Url::home(true) . '</span>{input}</div>{error}{hint}'
+    ])->textInput() ?>
 
     <?= $form->field($model, 'title')->textInput() ?>
 
