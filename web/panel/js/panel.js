@@ -234,4 +234,6 @@ $(function () {
             }
         });
     });
+
+    $('ul.sidebar-menu li.treeview.menu-open ul.treeview-menu').css({display: 'block'});
 });

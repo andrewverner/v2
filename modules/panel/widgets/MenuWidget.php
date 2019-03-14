@@ -15,19 +15,27 @@ class MenuWidget extends Widget
     public function run()
     {
         $items = [
-            'Categories' => '/panel/category',
-            'Sizes' => '/panel/size',
-            'Items' => '/panel/item',
-            'Images' => '/panel/image',
-            'Menu' => '/panel/menu',
-            'SEO' => '/panel/seo',
-            'Url manager' => '/panel/url-manager',
-            'Jumbotron' => '/panel/jumbotron-slide',
-            'Pages' => '/panel/page',
-            'Blocks' => '/panel/block',
-            'News' => '/panel/news',
-            'Users' => '/panel/user',
-            'Logs' => '/panel/log',
+            new MenuItem('Shop', 'fas fa-shopping-cart', null, [
+                new MenuItem('Categories', 'fas fa-list-ul', '/panel/category'),
+                new MenuItem('Sizes', 'fas fa-filter', '/panel/size'),
+                new MenuItem('Properties', 'fas fa-filter', '/panel/property'),
+                new MenuItem('Items', 'fas fa-boxes', '/panel/item'),
+            ]),
+            new MenuItem('Content', 'far fa-newspaper', null, [
+                new MenuItem('Pages', 'fas fa-file-alt', '/panel/page'),
+                new MenuItem('Blocks', 'fas fa-th', '/panel/block'),
+                new MenuItem('News', 'fas fa-newspaper', '/panel/news'),
+                new MenuItem('Jumbotron', 'fas fa-desktop', '/panel/jumbotron-slide'),
+                new MenuItem('Images', 'fas fa-images', '/panel/image'),
+            ]),
+            new MenuItem('Options', 'fas fa-cogs', null, [
+                new MenuItem('Menu', 'fas fa-bars', '/panel/menu'),
+                new MenuItem('SEO', 'fas fa-globe', '/panel/seo'),
+                new MenuItem('Url manager', 'fas fa-location-arrow', '/panel/url-manager'),
+                new MenuItem('Logs', 'fas fa-book', '/panel/log'),
+            ]),
+            new MenuItem('Users', 'fas fa-users', '/panel/user'),
+            new MenuItem('Orders', 'fas fa-luggage-cart', '/panel/order'),
         ];
 
         return $this->render('menu', ['items' => $items]);
