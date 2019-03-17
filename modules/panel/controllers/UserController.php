@@ -2,9 +2,15 @@
 
 namespace app\modules\panel\controllers;
 
+use app\models\SignUpForm;
+use app\models\UserAddress;
+use app\modules\panel\models\UserForm;
 use Yii;
 use app\models\User;
 use app\modules\panel\models\UserSearch;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,6 +20,14 @@ use yii\filters\VerbFilter;
  */
 class UserController extends Controller
 {
+    public function init()
+    {
+        Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Users' => '/panel/user',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -44,6 +58,13 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionForm()
+    {
+        $model = new SignUpForm();
+
+        return $this->renderPartial('_form', ['model' => $model]);
+    }
+
     /**
      * Displays a single User model.
      * @param integer $id
@@ -58,21 +79,57 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a new User model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @throws BadRequestHttpException
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new SignUpForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $user = User::create($model);
+
+            return $this->redirect(Yii::$app->urlManager->createUrl([
+                '/panel/user/view',
+                'id' => $user->id,
+            ]));
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        throw new BadRequestHttpException(Html::ul($model->getErrorSummary(true)));
+    }
+
+    public function actionBlock($id)
+    {
+        $user = User::findOne($id);
+
+        if (!$user) {
+            throw new  NotFoundHttpException(Yii::t('app', 'User not found'));
+        }
+
+        $user->blocked = $user->blocked ? 0 : 1;
+        if (!$user->save()) {
+            throw new  NotFoundHttpException(Html::ul($user->getErrorSummary(true)));
+        }
+    }
+
+    public function actionAddressForm($userId, $id = null)
+    {
+        $model = $id ? UserAddress::findOne($id) : new UserAddress();
+        $model->user_id = $userId;
+
+        return $this->renderPartial('_address-form', ['model' => $model, 'userId' => $userId]);
+    }
+
+    public function actionSaveAddress()
+    {
+        $id = ArrayHelper::getValue(Yii::$app->request->post('UserAddress'), 'id', null);
+
+        $model = $id ? UserAddress::findOne($id) : new UserAddress();
+        $model->load(Yii::$app->request->post());
+        if (!$model->validate()) {
+            throw new  BadRequestHttpException(Html::ul($model->getErrorSummary(true)));
+        }
+
+        $model->save();
     }
 
     /**

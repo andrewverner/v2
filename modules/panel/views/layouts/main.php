@@ -7,10 +7,12 @@ use yii\helpers\Html;
 use yidas\adminlte\AdminlteAsset;
 use app\modules\panel\assets\FontAwesomeAsset;
 use app\modules\panel\assets\PanelAsset;
+use kartik\select2\Select2Asset;
 
 AdminlteAsset::register($this);
 FontAwesomeAsset::register($this);
 PanelAsset::register($this);
+Select2Asset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

@@ -54,8 +54,17 @@ class SignUpForm extends Model
         ];
     }
 
-    public function checkUnique()
+    public function checkUnique($attribute)
     {
-        return true;
+        $exists = User::find()->where([
+            $attribute => $this->{$attribute},
+            'active' => 1,
+        ])->exists();
+
+        if ($exists) {
+            $this->addError($attribute, \Yii::t('app', 'This {attribute} is already taken', [
+                'attribute' => $this->attributeLabels()[$attribute],
+            ]));
+        }
     }
 }

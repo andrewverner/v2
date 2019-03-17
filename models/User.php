@@ -50,15 +50,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function checkForUnique($attribute)
     {
-        $model = self::findOne([
-            $attribute => $this->{$attribute},
-            'active' => 1,
-        ]);
+        if ($this->isNewRecord) {
+            $model = self::findOne([
+                $attribute => $this->{$attribute},
+                'active' => 1,
+            ]);
 
-        if ($model) {
-            $this->addError($attribute, Yii::t('app', '{attribute} is already taken', [
-                'attribute' => $this->attributeLabels()[$attribute],
-            ]));
+            if ($model) {
+                $this->addError($attribute, Yii::t('app', '{attribute} is already taken', [
+                    'attribute' => $this->attributeLabels()[$attribute],
+                ]));
+            }
         }
     }
 
