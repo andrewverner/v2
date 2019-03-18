@@ -117,6 +117,18 @@ $(function () {
                             if ($el.data('pjax')) {
                                 $.pjax.reload({container: $el.data('pjax')});
                             }
+                            if ($el.data('reload-source')) {
+                                $.ajax({
+                                    url: $el.data('reload-source'),
+                                    type: getValue($el.data('reload-type'), 'post'),
+                                    success: function (data) {
+                                        $($el.data('reload-target')).html(data);
+                                    },
+                                    error: function () {
+
+                                    }
+                                });
+                            }
                         },
                         error: function(data) {
                             $.alert.error(data.responseText);

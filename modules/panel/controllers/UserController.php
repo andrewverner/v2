@@ -4,7 +4,6 @@ namespace app\modules\panel\controllers;
 
 use app\models\SignUpForm;
 use app\models\UserAddress;
-use app\modules\panel\models\UserForm;
 use Yii;
 use app\models\User;
 use app\modules\panel\models\UserSearch;

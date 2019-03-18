@@ -17,4 +17,9 @@ class TestController extends \app\components\Controller
     {
         return $this->render('dadata');
     }
+
+    public function actionYMaps()
+    {
+        return $this->render('y-maps');
+    }
 }

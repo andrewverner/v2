@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\web\IdentityInterface;
 
 /**
@@ -22,6 +24,7 @@ use yii\web\IdentityInterface;
  *
  * @property Order[] $orders
  * @property UserAddress[] $addresses
+ * @property ActiveDataProvider $addressesDataProvider
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -144,5 +147,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getAddresses()
     {
         return $this->hasMany(UserAddress::class, ['user_id' => 'id']);
+    }
+
+    public function getAddressesDataProvider()
+    {
+        return new ActiveDataProvider([
+            'query' => UserAddress::find()->where(['user_id' => $this->id]),
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
     }
 }
