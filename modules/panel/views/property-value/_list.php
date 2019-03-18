@@ -36,7 +36,36 @@
     'dataProvider' => $dataProvider,
     'columns' => [
         'id',
-        'value'
+        'value',
+        [
+            'label' => '',
+            'format' => 'raw',
+            'value' => function ($value) use ($model) {
+                return \yii\helpers\Html::tag(
+                    'span',
+                    '<i class="far fa-trash-alt"></i>',
+                    [
+                        'class' => 'mf-grid-control-btn',
+                        'data-id' => $value['id'],
+                        'data-confirm' => Yii::t('app', 'Drop property value {value}?', ['value' => $value['value']]),
+                        'data-modal-type' => 'modal-danger',
+                        'data-type' => 'post',
+                        'data-title' => Yii::t('app', 'Delete property value?'),
+                        'data-msg' => Yii::t('app', 'Property value has been dropped'),
+                        'data-url' => Yii::$app->urlManager->createUrl([
+                            '/panel/property-value/drop',
+                            'id' => $value['id']
+                        ]),
+                        'data-reload-source' => Yii::$app->urlManager->createUrl([
+                            '/panel/property-value/list',
+                            'propertyId' => $model->id,
+                        ]),
+                        'data-reload-target' => '#value-list-container',
+                        'data-reload-type' => 'get',
+                    ]
+                );
+            }
+        ],
     ],
 ]); ?>
 

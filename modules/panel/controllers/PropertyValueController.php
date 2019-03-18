@@ -10,6 +10,7 @@ namespace app\modules\panel\controllers;
 
 use app\models\ItemProperty;
 use app\models\ItemPropertyValue;
+use app\models\ItemPropertyValueRel;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -56,5 +57,16 @@ class PropertyValueController extends Controller
         }
 
         $model->save();
+    }
+
+    public function actionDrop($id)
+    {
+        if (!$model = ItemPropertyValue::findOne($id)) {
+            throw new NotFoundHttpException(\Yii::t('app', 'Size not found'));
+        }
+
+        ItemPropertyValueRel::deleteAll(['property_value_id' => $model->id]);
+
+        $model->delete();
     }
 }
