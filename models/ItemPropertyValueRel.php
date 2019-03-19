@@ -12,6 +12,9 @@ use Yii;
  * @property int $property_value_id
  * @property string $created
  * @property string $updated
+ *
+ * @property Item $item
+ * @property ItemPropertyValue $propertyValue
  */
 class ItemPropertyValueRel extends \yii\db\ActiveRecord
 {
@@ -47,5 +50,15 @@ class ItemPropertyValueRel extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public function getItem()
+    {
+        return $this->hasOne(Item::class, ['id' => 'item_id']);
+    }
+
+    public function getPropertyValue()
+    {
+        return $this->hasOne(ItemPropertyValue::class, ['id' => 'property_value_id']);
     }
 }

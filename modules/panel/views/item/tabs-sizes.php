@@ -11,9 +11,9 @@
 use kartik\select2\Select2;
 ?>
 <div>
-    <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sizeModal">
-            Add size
+    <div class="text-right">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sizeModal">
+            <i class="fas fa-plus"></i> Add size
         </button>
     </div>
     <?php if (!$model->sizeRels): ?>
@@ -56,8 +56,18 @@ use kartik\select2\Select2;
                             'span',
                             '<i class="fas fa-trash-alt pointer"></i>',
                             [
-                                'class' => 'drop-item-size',
-                                'data-id' => $rel->id,
+                                'data-confirm' => Yii::t('app', 'Drop size {size}?', [
+                                    'size' => $rel->size->value,
+                                ]),
+                                'data-modal-type' => 'modal-danger',
+                                'data-pjax' => '#size-pjax',
+                                'data-type' => 'post',
+                                'data-url' => Yii::$app->urlManager->createUrl([
+                                    '/panel/item/drop-size',
+                                    'id' => $rel->id,
+                                ]),
+                                'data-msg' => Yii::t('app', 'Size has been dropped'),
+                                'data-title' => Yii::t('app', 'Drop size?'),
                             ]
                         );
                     },

@@ -7,7 +7,7 @@
 <div class="modal fade in <?= $widget->type ? "modal-{$widget->type}" : '' ?>"
      id="<?= $widget->id ?>"
      data-keyboard="<?= $widget->keyboard ? 'true' : 'false' ?>"
-     data-backdrop="<?= $widget->keyboard ? 'true' : 'false' ?>">
+     data-backdrop="<?= $widget->backdrop ? 'true' : 'false' ?>">
     <div class="modal-dialog">
         <div class="modal-content">
             <?php if ($widget->title): ?>

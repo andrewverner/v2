@@ -65,3 +65,59 @@ a.mf-grid-control-btn {
 .pointer {
     cursor: pointer;
 }
+
+ul.property-list {
+    padding: 0;
+    margin: 0;
+    list-style: none inside;
+}
+
+ul.property-list li {
+    display: block;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+ul.property-list li:last-child {
+    border-bottom: none;
+}
+
+ul.property-list li:hover, ul.property-list li.active {
+    background-color: #3c8dbc;
+    color: #fff;
+}
+
+ul.property-list li.active:after {
+    content: "\027A4";
+    display: block;
+    float: right;
+}
+
+ul.property-value-list {
+    padding: 0;
+    margin: 0;
+    list-style: none inside;
+}
+
+ul.property-value-list li {
+    display: block;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+ul.property-value-list li:last-child {
+    border-bottom: none;
+}
+
+ul.property-value-list li:hover, ul.property-value-list li.active {
+    background-color: #3c8dbc;
+    color: #fff;
+}
+
+ul.property-value-list li.active:after {
+    content: "\02714";
+    display: block;
+    float: right;
+}

@@ -69,4 +69,16 @@ class PropertyValueController extends Controller
 
         $model->delete();
     }
+
+    public function actionValue($propertyId)
+    {
+        if (!$model = ItemProperty::findOne($propertyId)) {
+            throw new NotFoundHttpException(\Yii::t('app', 'Property not found'));
+        }
+
+        return $this->renderPartial('_value', [
+            'property' => $model,
+            'models' => ItemPropertyValue::find()->where(['property_id' => $model->id])->orderBy(['value' => SORT_ASC])->all()
+        ]);
+    }
 }

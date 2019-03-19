@@ -47,7 +47,7 @@
                     [
                         'class' => 'mf-grid-control-btn',
                         'data-id' => $value['id'],
-                        'data-confirm' => Yii::t('app', 'Drop property value {value}?', ['value' => $value['value']]),
+                        'data-confirm' => Yii::t('app', 'Drop property value {value}? This action will cause deleting of all corresponding item property relations.', ['value' => $value['value']]),
                         'data-modal-type' => 'modal-danger',
                         'data-type' => 'post',
                         'data-title' => Yii::t('app', 'Delete property value?'),

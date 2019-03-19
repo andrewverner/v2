@@ -12,6 +12,9 @@ use Yii;
  * @property string $value
  * @property string $created
  * @property string $updated
+ *
+ * @property ItemProperty $property
+ * @property ItemPropertyValueRel[] $rels
  */
 class ItemPropertyValue extends \yii\db\ActiveRecord
 {
@@ -48,5 +51,24 @@ class ItemPropertyValue extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public function getProperty()
+    {
+        return $this->hasOne(ItemProperty::class, ['id' => 'property_id']);
+    }
+
+    public function getRels()
+    {
+        return $this->hasMany(ItemPropertyValueRel::class, ['property_value_id' => 'id']);
+    }
+
+    public function beforeDelete()
+    {
+        foreach ($this->rels as $rel) {
+            $rel->delete();
+        }
+
+        return parent::beforeDelete();
     }
 }

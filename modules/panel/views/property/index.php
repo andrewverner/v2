@@ -71,7 +71,7 @@ $this->title = Yii::t('app', 'Item properties');
                                     [
                                         'class' => 'mf-grid-control-btn',
                                         'data-id' => $model['id'],
-                                        'data-confirm' => Yii::t('app', 'Drop property {title}?', ['title' => $model['title']]),
+                                        'data-confirm' => Yii::t('app', 'Drop property {title}? This action will cause deleting of all corresponding property values and item property relations.', ['title' => $model['title']]),
                                         'data-modal-type' => 'modal-danger',
                                         'data-type' => 'post',
                                         'data-title' => Yii::t('app', 'Delete property?'),

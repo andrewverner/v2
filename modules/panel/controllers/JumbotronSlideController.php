@@ -36,7 +36,7 @@ class JumbotronSlideController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'save' => ['POST', 'AJAX'],
-                    'drop' => ['POST', 'AJAX'],
+                    'drop' => ['POST'],
                 ],
             ],
         ];
@@ -130,5 +130,9 @@ class JumbotronSlideController extends Controller
         }
 
         $model->delete();
+
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(Yii::$app->urlManager->createUrl('/panel/jumbotron-slide'));
+        }
     }
 }

@@ -73,6 +73,17 @@ $(function () {
         }
     });
 
+    /**
+     * tag option data-get-form="" or data-get-form
+     * data-url - URL for form request
+     * data-type - AJAX request type e.g. POST, GET etc. (default: POST)
+     * data-id - PK for a model if data-type is POST (can be empty)
+     * data-msg - Message that shows after successfully form submit
+     * data-pjax - PJAX container selector to reload after successfully form submit
+     * data-reload-source - URL to fetch data after after successfully form submit
+     * data-reload-target - container selector for data from data-reload-source
+     * data-reload-type - request type for data-reload-source (default POST)
+     */
     $(document).on('click', '[data-get-form]', function () {
         var $el = $(this);
         $.ajax({

@@ -13,6 +13,8 @@ use Yii;
  * @property int $filterable
  * @property string $created
  * @property string $updated
+ *
+ * @property ItemPropertyValue[] $values
  */
 class ItemProperty extends \yii\db\ActiveRecord
 {
@@ -50,5 +52,19 @@ class ItemProperty extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public function getValues()
+    {
+        return $this->hasMany(ItemPropertyValue::class, ['property_id' => 'id']);
+    }
+
+    public function beforeDelete()
+    {
+        foreach ($this->values as $value) {
+            $value->delete();
+        }
+
+        return parent::beforeDelete();
     }
 }

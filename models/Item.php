@@ -21,6 +21,7 @@ use yii\db\Expression;
  * @property ItemCategory[] $categoryRels
  * @property ItemSize[] $sizeRels
  * @property ItemImage[] $imageRels
+ * @property ItemPropertyValueRel[] $propertyRels
  */
 class Item extends ActiveRecord
 {
@@ -135,5 +136,13 @@ class Item extends ActiveRecord
     public function getImageRels()
     {
         return $this->hasMany(ItemImage::className(), ['item_id' => 'id']);
+    }
+
+    public function getPropertyRels()
+    {
+        return $this->hasMany(ItemPropertyValueRel::class, ['item_id' => 'id'])
+            ->innerJoinWith(['propertyValue'])
+            ->innerJoin(ItemProperty::tableName() . ' ip', 'ip.id = item_property_value.property_id')
+            ->orderBy(['ip.title' => SORT_ASC, 'item_property_value.value' => SORT_ASC]);
     }
 }

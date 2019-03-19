@@ -5,6 +5,7 @@ namespace app\modules\panel\controllers;
 use app\models\Category;
 use app\models\ItemCategory;
 use app\models\ItemImage;
+use app\models\ItemPropertyValueRel;
 use app\models\ItemSize;
 use app\models\Size;
 use app\modules\panel\models\UploadModel;
@@ -13,6 +14,7 @@ use app\models\Item;
 use app\modules\panel\models\ItemSearch;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -46,6 +48,7 @@ class ItemController extends Controller
                     'drop-category' => ['POST', 'AJAX'],
                     'add-size' => ['POST', 'AJAX'],
                     'drop-size' => ['POST', 'AJAX'],
+                    'drop-property' => ['POST', 'AJAX'],
                 ],
             ],
         ];
@@ -218,16 +221,9 @@ class ItemController extends Controller
         return true;
     }
 
-    public function actionDropSize()
+    public function actionDropSize($id)
     {
-        $relId = Yii::$app->request->post('relId');
-
-        if (!$relId) {
-            return false;
-        }
-
-        $rel = ItemSize::findOne($relId);
-        if (!$rel) {
+        if (!$rel = ItemSize::findOne($id)) {
             return false;
         }
 
@@ -295,5 +291,30 @@ class ItemController extends Controller
         }
 
         return $this->renderPartial('_categories-form', ['model' => $model]);
+    }
+
+    public function actionSavePropertyList($id)
+    {
+        if (!$model = Item::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Item not found'));
+        }
+
+        if (!$values = Yii::$app->request->post('values', [])) {
+            throw new BadRequestHttpException(Yii::t('app', 'Values list is empty'));
+        }
+
+        foreach ($values as $valueId) {
+            if (!ItemPropertyValueRel::find()->where(['item_id' => $id, 'property_value_id' => $valueId])->exists()) {
+                $model = new ItemPropertyValueRel();
+                $model->property_value_id = $valueId;
+                $model->item_id = $id;
+                $model->save();
+            }
+        }
+    }
+
+    public function actionDropProperty($id)
+    {
+        ItemPropertyValueRel::deleteAll(['id' => $id]);
     }
 }

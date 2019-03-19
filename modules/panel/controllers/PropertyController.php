@@ -53,19 +53,28 @@ class PropertyController extends Controller
 
     public function actionDrop($id)
     {
-        /*if (!$model = ItemProperty::findOne($id)) {
+        if (!$model = ItemProperty::findOne($id)) {
             throw new NotFoundHttpException(\Yii::t('app', 'Property not found'));
         }
 
         $transation = \Yii::$app->db->beginTransaction();
         try {
-            $propertyValuesIds = ItemPropertyValue::findAll(['property_id' => $model->id]);
-
             $model->delete();
 
             $transation->commit();
         } catch (\Throwable $exception) {
             $transation->rollBack();
-        }*/
+        }
+    }
+
+    public function actionList()
+    {
+        $models = ItemProperty::find()->all();
+
+        if (!$models) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Property list is empty'));
+        }
+
+        return $this->renderPartial('_list', ['models' => $models]);
     }
 }
