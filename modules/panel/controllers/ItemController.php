@@ -5,6 +5,8 @@ namespace app\modules\panel\controllers;
 use app\models\Category;
 use app\models\ItemCategory;
 use app\models\ItemImage;
+use app\models\ItemProperty;
+use app\models\ItemPropertyValue;
 use app\models\ItemPropertyValueRel;
 use app\models\ItemSize;
 use app\models\Size;
@@ -304,12 +306,37 @@ class ItemController extends Controller
         }
 
         foreach ($values as $valueId) {
-            if (!ItemPropertyValueRel::find()->where(['item_id' => $id, 'property_value_id' => $valueId])->exists()) {
-                $model = new ItemPropertyValueRel();
-                $model->property_value_id = $valueId;
-                $model->item_id = $id;
-                $model->save();
+            if (ItemPropertyValueRel::find()->where(['item_id' => $id, 'property_value_id' => $valueId])->exists()) {
+                continue;
             }
+
+            $propertyValueModel = ItemPropertyValue::findOne($valueId);
+            if (!$propertyValueModel->property->multiple) {
+                $ip = ItemProperty::tableName();
+                $ipv = ItemPropertyValue::tableName();
+                $ipvr = ItemPropertyValueRel::tableName();
+                if (
+                    ItemProperty::find()
+                        ->from("{$ip} ip")
+                        ->innerJoin("{$ipv} ipv", 'ipv.property_id = ip.id')
+                        ->innerJoin("{$ipvr} ipvr", 'ipv.id = ipvr.property_value_id')
+                        ->where([
+                            'ip.id' => $propertyValueModel->property->id,
+                            'ipvr.item_id' => $model->id,
+                        ])
+                        ->exists()
+                ) {
+                    throw new BadRequestHttpException(Yii::t(
+                    'app',
+                    'Property is not multiple and item already has a property of this type'
+                    ));
+                }
+            }
+
+            $model = new ItemPropertyValueRel();
+            $model->property_value_id = $valueId;
+            $model->item_id = $id;
+            $model->save();
         }
     }
 

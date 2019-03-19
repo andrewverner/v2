@@ -12,6 +12,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@item-images-dir' => '@app/web/uploads/items',
+        '@jumbotron-images-dir' => '@app/web/uploads/jumbotron',
     ],
     'modules' => [
         'panel' => [

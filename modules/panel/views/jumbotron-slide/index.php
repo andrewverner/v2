@@ -38,7 +38,19 @@ $this->title = Yii::t('app', 'Jumbotron slides');
                         'dataProvider' => $dataProvider,
                         'columns' => [
                             'id',
-                            'title',
+                            [
+                                'label' => '',
+                                'format' => 'html',
+                                'value' => function ($model) {
+                                    return \yii\helpers\Html::a(
+                                        $model['title'],
+                                        Yii::$app->urlManager->createUrl([
+                                            '/panel/jumbotron-slide/view',
+                                            'id' => $model['id'],
+                                        ])
+                                    );
+                                }
+                            ],
                             'active',
                             [
                                 'label' => '',

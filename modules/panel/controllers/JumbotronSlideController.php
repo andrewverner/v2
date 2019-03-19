@@ -7,11 +7,14 @@ use Yii;
 use app\models\JumbotronSlide;
 use app\modules\panel\models\JumbotronSlideSearch;
 use yii\helpers\ArrayHelper;
+use yii\helpers\FileHelper;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * JumbotronSlideController implements the CRUD actions for JumbotronSlide model.
@@ -133,6 +136,53 @@ class JumbotronSlideController extends Controller
 
         if (!Yii::$app->request->isAjax) {
             return $this->redirect(Yii::$app->urlManager->createUrl('/panel/jumbotron-slide'));
+        }
+    }
+
+    public function actionUpload($id)
+    {
+        if (!$slideModel = JumbotronSlide::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Jumbotron slide not found'));
+        }
+
+        $uploadModel = new UploadModel();
+        $uploadedFile = UploadedFile::getInstance($uploadModel, 'files');
+
+        $directory = Yii::getAlias('@jumbotron-images-dir') . DIRECTORY_SEPARATOR;
+        if (!is_dir($directory)) {
+            FileHelper::createDirectory($directory);
+        }
+
+        if (!$uploadedFile) {
+            throw new BadRequestHttpException('app', 'Something went wrong');
+        }
+
+        $uid = uniqid(time(), true);
+        $fileName = $uid . '.' . $uploadedFile->extension;
+        $filePath = $directory . $fileName;
+        if ($uploadedFile->saveAs($filePath)) {
+            $imageModel = new \app\models\Image();
+            $imageModel->path = '/uploads/jumbotron/';
+            $imageModel->name = $fileName;
+            $imageModel->size = $uploadedFile->size;
+            $imageModel->tags = $slideModel->title;
+            $imageModel->save();
+
+            $slideModel->image_id = $imageModel->id;
+            $slideModel->save();
+
+            /*return Json::encode([
+                'files' => [
+                    [
+                        'name' => $fileName,
+                        'size' => $uploadedFile->size,
+                        'url' => $filePath,
+                        'thumbnailUrl' => $filePath,
+                        'deleteUrl' => 'image-delete?id=' . $imageModel->id,
+                        'deleteType' => 'POST',
+                    ],
+                ],
+            ]);*/
         }
     }
 }

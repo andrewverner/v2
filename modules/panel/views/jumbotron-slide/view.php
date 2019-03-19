@@ -61,14 +61,27 @@ $this->params['breadcrumbs'][$model->title] = Yii::$app->urlManager->createUrl([
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <?php \yii\widgets\Pjax::begin(['id' => 'slide-image-pjax']); ?>
         <?php $box = \app\modules\panel\widgets\BoxWidget::begin([
             'title' => Yii::t('app', 'Slide image')
         ]); ?>
-        <?php $box->addButton(\yii\helpers\Html::tag(
-            'span',
-            'Upload image',
-            ['class' => 'btn btn-default btn-sm']
-        )); ?>
+        <?php $box->addButton(\dosamigos\fileupload\FileUpload::widget([
+            'model' => $uploadModel,
+            'attribute' => 'files',
+            'url' => ['/panel/jumbotron-slide/upload', 'id' => $model->id],
+            'options' => ['accept' => 'image/*'],
+            'clientOptions' => [
+                'maxFileSize' => 2000000
+            ],
+            'clientEvents' => [
+                'fileuploaddone' => 'function(e, data) {
+                    $.pjax.reload({container: "#slide-image-pjax"});
+                }',
+                'fileuploadfail' => 'function(e, data) {
+                    $.alert.error(data.responseText);
+                }',
+            ],
+        ])); ?>
             <?php if (!$model->image): ?>
             <div class="alert alert-info">
                 <?= Yii::t('app', 'This slide does not have an image yet'); ?>
@@ -79,5 +92,6 @@ $this->params['breadcrumbs'][$model->title] = Yii::$app->urlManager->createUrl([
                 </div>
             <?php endif; ?>
         <?php \app\modules\panel\widgets\BoxWidget::end(); ?>
+        <?php \yii\widgets\Pjax::end(); ?>
     </div>
 </div>
