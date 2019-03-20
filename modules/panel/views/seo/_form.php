@@ -15,10 +15,6 @@ use yii\widgets\ActiveForm;
         'method' => 'post',
     ]) ?>
 
-    <?= $form->field($model, 'url', [
-        'template' => '{label}<div class="input-group"><span class="input-group-addon">' . \yii\helpers\Url::home(true) . '</span>{input}</div>{error}{hint}'
-    ])->textInput() ?>
-
     <?= $form->field($model, 'title')->textInput() ?>
 
     <?= $form->field($model, 'keywords')->textInput() ?>
@@ -29,6 +25,8 @@ use yii\widgets\ActiveForm;
 
     <div class="hidden">
         <?= $form->field($model, 'id')->textInput() ?>
+        <?= $form->field($model, 'entity_id')->textInput() ?>
+        <?= $form->field($model, 'entity_type')->textInput() ?>
     </div>
 
     <?php ActiveForm::end(); ?>

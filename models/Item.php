@@ -22,6 +22,7 @@ use yii\db\Expression;
  * @property ItemSize[] $sizeRels
  * @property ItemImage[] $imageRels
  * @property ItemPropertyValueRel[] $propertyRels
+ * @property Seo $seo
  */
 class Item extends ActiveRecord
 {
@@ -144,5 +145,19 @@ class Item extends ActiveRecord
             ->innerJoinWith(['propertyValue'])
             ->innerJoin(ItemProperty::tableName() . ' ip', 'ip.id = item_property_value.property_id')
             ->orderBy(['ip.title' => SORT_ASC, 'item_property_value.value' => SORT_ASC]);
+    }
+
+    public function getSeo()
+    {
+        return $this->hasOne(Seo::class, ['entity_id' => 'id'])->where(['entity_type' => 'Item']);
+    }
+
+    public function beforeDelete()
+    {
+        if ($seo = $this->seo) {
+            $seo->delete();
+        }
+
+        return parent::beforeDelete();
     }
 }

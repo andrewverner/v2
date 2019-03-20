@@ -13,6 +13,8 @@ use Yii;
  * @property int $published
  * @property string $created
  * @property string $updated
+ *
+ * @property Seo $seo
  */
 class Page extends \yii\db\ActiveRecord
 {
@@ -51,5 +53,19 @@ class Page extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public function getSeo()
+    {
+        return $this->hasOne(Seo::class, ['entity_id' => 'id'])->where(['entity_type' => 'Page']);
+    }
+
+    public function beforeDelete()
+    {
+        if ($seo = $this->seo) {
+            $seo->delete();
+        }
+
+        return parent::beforeDelete();
     }
 }

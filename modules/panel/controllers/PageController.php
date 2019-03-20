@@ -14,6 +14,14 @@ use yii\filters\VerbFilter;
  */
 class PageController extends Controller
 {
+    public function init()
+    {
+        Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Pages' => '/panel/page',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -123,5 +131,18 @@ class PageController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionDrop($id)
+    {
+        if (!$model = Page::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Page slide not found'));
+        }
+
+        $model->delete();
+
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(Yii::$app->urlManager->createUrl('/panel/page'));
+        }
     }
 }

@@ -8,13 +8,14 @@ use Yii;
  * This is the model class for table "seo".
  *
  * @property int $id
- * @property string $url
  * @property string $title
  * @property string $keywords
  * @property string $description
  * @property int $active
  * @property string $created
  * @property string $updated
+ * @property string $entity_type
+ * @property int $entity_id
  */
 class Seo extends \yii\db\ActiveRecord
 {
@@ -32,11 +33,12 @@ class Seo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['url'], 'required'],
-            [['active'], 'integer'],
+            [['active', 'entity_id'], 'integer'],
             [['created', 'updated'], 'safe'],
-            [['url', 'title'], 'string', 'max' => 255],
+            [['entity_type', 'entity_id'], 'required'],
+            [['title'], 'string', 'max' => 255],
             [['keywords', 'description'], 'string', 'max' => 1023],
+            [['entity_type'], 'string', 'max' => 45],
         ];
     }
 
@@ -47,13 +49,14 @@ class Seo extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'url' => Yii::t('app', 'Url'),
             'title' => Yii::t('app', 'Title'),
             'keywords' => Yii::t('app', 'Keywords'),
             'description' => Yii::t('app', 'Description'),
             'active' => Yii::t('app', 'Active'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
+            'entity_type' => Yii::t('app', 'Entity Type'),
+            'entity_id' => Yii::t('app', 'Entity ID'),
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace app\modules\panel\controllers;
 
+use app\models\Item;
+use app\models\Page;
 use app\models\Seo;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -80,5 +82,33 @@ class SeoController extends Controller
         }
 
         $model->delete();
+    }
+
+    public function actionFormByEntity($type, $id)
+    {
+        $model = Seo::find()->where([
+            'entity_type' => $type,
+            'entity_id' => $id,
+        ])->one() ?? new Seo();
+
+        if ($model->isNewRecord) {
+            switch ($type) {
+                case 'Item':
+                    $entityModel = Item::findOne($id);
+                    $model->title = $entityModel->title ?? null;
+                    break;
+                case 'Page':
+                    $entityModel = Page::findOne($id);
+                    $model->title = $entityModel->title ?? null;
+                    break;
+                default:
+                    $entityModel = null;
+            }
+
+            $model->entity_id = $id;
+            $model->entity_type = $type;
+        }
+
+        return $this->renderPartial('_form', ['model' => $model]);
     }
 }

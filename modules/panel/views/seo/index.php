@@ -39,7 +39,8 @@ $this->title = Yii::t('app', 'Seo');
                         'dataProvider' => $dataProvider,
                         'columns' => [
                             'id',
-                            'url',
+                            'entity_type',
+                            'entity_id',
                             'active',
                             [
                                 'label' => '',
@@ -66,7 +67,7 @@ $this->title = Yii::t('app', 'Seo');
                                             [
                                                 'class' => 'mf-grid-control-btn',
                                                 'data-id' => $model['id'],
-                                                'data-confirm' => Yii::t('app', 'Drop seo record for {url}?', ['url' => $model['url']]),
+                                                'data-confirm' => Yii::t('app', 'Drop seo record?'),
                                                 'data-modal-type' => 'modal-danger',
                                                 'data-type' => 'post',
                                                 'data-title' => Yii::t('app', 'Delete seo record?'),

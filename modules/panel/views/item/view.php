@@ -38,6 +38,10 @@ $this->params['breadcrumbs'][$model->title] = Yii::$app->urlManager->createUrl([
             Yii::t('app', 'Images'),
             $this->render('tabs-images', ['model' => $model, 'uploadModel' => $uploadModel])
         ); ?>
+        <?php $tabs->addTab(
+            Yii::t('app', 'SEO'),
+            $this->render('tabs-seo', ['model' => $model])
+        ); ?>
         <?php \app\modules\panel\widgets\TabsWidget::end(); ?>
     </div>
 </div>

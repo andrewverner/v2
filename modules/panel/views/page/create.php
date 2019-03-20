@@ -6,15 +6,18 @@ use yii\helpers\Html;
 /* @var $model app\models\Page */
 
 $this->title = Yii::t('app', 'Create Page');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pages'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs']['New page'] = Yii::$app->urlManager->createUrl('/panel/page/create');
 ?>
 <div class="page-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <?php \app\modules\panel\widgets\BoxWidget::begin([
+                'title' => Yii::t('app', 'New page')
+            ]) ?>
+            <?= $this->render('_form', [
+                'model' => $model,
+            ]) ?>
+            <?php \app\modules\panel\widgets\BoxWidget::end() ?>
+        </div>
+    </div>
 </div>
