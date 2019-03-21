@@ -1,20 +1,21 @@
 <?php
 
-use yii\helpers\Html;
-
 /* @var $this yii\web\View */
 /* @var $model app\models\News */
 
-$this->title = Yii::t('app', 'Create News');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'News'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Create Article');
+$this->params['breadcrumbs']['New article'] = Yii::$app->urlManager->createUrl('/panel/news/create');
 ?>
-<div class="news-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="page-create">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <?php \app\modules\panel\widgets\BoxWidget::begin([
+                'title' => Yii::t('app', 'New article')
+            ]) ?>
+            <?= $this->render('_form', [
+                'model' => $model,
+            ]) ?>
+            <?php \app\modules\panel\widgets\BoxWidget::end() ?>
+        </div>
+    </div>
 </div>

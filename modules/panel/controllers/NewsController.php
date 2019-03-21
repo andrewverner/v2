@@ -14,6 +14,14 @@ use yii\filters\VerbFilter;
  */
 class NewsController extends Controller
 {
+    public function init()
+    {
+        Yii::$app->getView()->params['breadcrumbs'] = [
+            'Panel' => '/panel',
+            'Pages' => '/panel/news',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */

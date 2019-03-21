@@ -2,7 +2,9 @@
 
 namespace app\modules\panel\controllers;
 
+use app\models\Category;
 use app\models\Item;
+use app\models\News;
 use app\models\Page;
 use app\models\Seo;
 use yii\data\ActiveDataProvider;
@@ -100,6 +102,14 @@ class SeoController extends Controller
                 case 'Page':
                     $entityModel = Page::findOne($id);
                     $model->title = $entityModel->title ?? null;
+                    break;
+                case 'News':
+                    $entityModel = News::findOne($id);
+                    $model->title = $entityModel->title ?? null;
+                    break;
+                case 'Category':
+                    $entityModel = Category::findOne($id);
+                    $model->title = $entityModel->name ?? null;
                     break;
                 default:
                     $entityModel = null;

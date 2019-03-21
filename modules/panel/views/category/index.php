@@ -62,6 +62,21 @@ $this->title = Yii::t('app', 'Categories');
                                     ),
                                     \yii\helpers\Html::tag(
                                         'span',
+                                        '<i class="fas fa-globe"></i>',
+                                        [
+                                            'class' => 'mf-grid-control-btn delete-category',
+                                            'data-id' => $model['id'],
+                                            'data-get-form' => '',
+                                            'data-type' => 'get',
+                                            'data-msg' => Yii::t('app', 'Seo record has been saved'),
+                                            'data-url' => Yii::$app->urlManager->createUrl([
+                                                '/panel/seo/form-by-entity',
+                                                'type' => 'Category',
+                                            ]),
+                                        ]
+                                    ),
+                                    \yii\helpers\Html::tag(
+                                        'span',
                                         '<i class="far fa-trash-alt"></i>',
                                         [
                                             'class' => 'mf-grid-control-btn delete-category',
