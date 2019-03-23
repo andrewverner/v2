@@ -41,29 +41,52 @@
             'label' => '',
             'format' => 'raw',
             'value' => function ($value) use ($model) {
-                return \yii\helpers\Html::tag(
-                    'span',
-                    '<i class="far fa-trash-alt"></i>',
-                    [
-                        'class' => 'mf-grid-control-btn',
-                        'data-id' => $value['id'],
-                        'data-confirm' => Yii::t('app', 'Drop property value {value}? This action will cause deleting of all corresponding item property relations.', ['value' => $value['value']]),
-                        'data-modal-type' => 'modal-danger',
-                        'data-type' => 'post',
-                        'data-title' => Yii::t('app', 'Delete property value?'),
-                        'data-msg' => Yii::t('app', 'Property value has been dropped'),
-                        'data-url' => Yii::$app->urlManager->createUrl([
-                            '/panel/property-value/drop',
-                            'id' => $value['id']
-                        ]),
-                        'data-reload-source' => Yii::$app->urlManager->createUrl([
-                            '/panel/property-value/list',
-                            'propertyId' => $model->id,
-                        ]),
-                        'data-reload-target' => '#value-list-container',
-                        'data-reload-type' => 'get',
-                    ]
-                );
+                return implode('', [
+                    \yii\helpers\Html::tag(
+                        'span',
+                        '<i class="fas fa-edit"></i>',
+                        [
+                            'class' => 'mf-grid-control-btn',
+                            'data-id' => $value['id'],
+                            'data-get-form' => '',
+                            'data-type' => 'post',
+                            'data-url' => Yii::$app->urlManager->createUrl([
+                                '/panel/property-value/form',
+                                'id' => $value['id'],
+                            ]),
+                            'data-msg' => Yii::t('app', 'Property value has been saved'),
+                            'data-reload-source' => Yii::$app->urlManager->createUrl([
+                                '/panel/property-value/list',
+                                'propertyId' => $model->id,
+                            ]),
+                            'data-reload-target' => '#value-list-container',
+                            'data-reload-type' => 'get',
+                        ]
+                    ),
+                    \yii\helpers\Html::tag(
+                        'span',
+                        '<i class="far fa-trash-alt"></i>',
+                        [
+                            'class' => 'mf-grid-control-btn',
+                            'data-id' => $value['id'],
+                            'data-confirm' => Yii::t('app', 'Drop property value {value}? This action will cause deleting of all corresponding item property relations.', ['value' => $value['value']]),
+                            'data-modal-type' => 'modal-danger',
+                            'data-type' => 'post',
+                            'data-title' => Yii::t('app', 'Delete property value?'),
+                            'data-msg' => Yii::t('app', 'Property value has been dropped'),
+                            'data-url' => Yii::$app->urlManager->createUrl([
+                                '/panel/property-value/drop',
+                                'id' => $value['id']
+                            ]),
+                            'data-reload-source' => Yii::$app->urlManager->createUrl([
+                                '/panel/property-value/list',
+                                'propertyId' => $model->id,
+                            ]),
+                            'data-reload-target' => '#value-list-container',
+                            'data-reload-type' => 'get',
+                        ]
+                    )
+                ]);
             }
         ],
     ],

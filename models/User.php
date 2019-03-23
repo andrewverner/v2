@@ -3,8 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Event;
 use yii\data\ActiveDataProvider;
-use yii\data\ArrayDataProvider;
 use yii\web\IdentityInterface;
 
 /**
@@ -28,6 +28,13 @@ use yii\web\IdentityInterface;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    const CREATE_USER = 'createUser';
+
+    public function init()
+    {
+        $this->on(self::EVENT_AFTER_INSERT, [$this, 'onCreate'], ['user' => $this]);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -112,15 +119,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return false;
     }
 
-    public static function create(SignUpForm $form)
+    public static function create($username, $password, $email)
     {
         $user = new self;
-        $user->username = $form->username;
-        $user->password = Yii::$app->security->generatePasswordHash($form->password1);
-        $user->email = $form->email;
+        $user->username = $username;
+        $user->password = Yii::$app->security->generatePasswordHash($password);
+        $user->email = $email;
         $user->save();
-
-        Hash::create($user->id);
 
         return $user;
     }
@@ -157,5 +162,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 'pageSize' => 100,
             ],
         ]);
+    }
+
+    public function onCreate(Event $event)
+    {
+        $user = $event->data['user'] ?? null;
+        if (!$user instanceof $this) {
+            return;
+        }
+
+        Hash::create($user->id);
     }
 }

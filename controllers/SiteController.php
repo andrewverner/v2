@@ -140,7 +140,11 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
-                User::create($model);
+                User::create(
+                    $model->username,
+                    $model->password1,
+                    $model->email
+                );
                 Yii::$app->session->setFlash('success', Yii::t('app', 'A letter with account activation link has been sent to your email address'));
 
                 return $this->redirect(Yii::$app->urlManager->createUrl('/login'));

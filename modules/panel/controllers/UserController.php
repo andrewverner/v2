@@ -85,7 +85,11 @@ class UserController extends Controller
         $model = new SignUpForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $user = User::create($model);
+            $user = User::create(
+                $model->username,
+                $model->password1,
+                $model->email
+            );
 
             return $this->redirect(Yii::$app->urlManager->createUrl([
                 '/panel/user/view',

@@ -26,6 +26,9 @@ $config = [
         ],
     ],
     'components' => [
+        'notifier' => [
+            'class' => 'app\components\Notifier',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'AVVtUliXi4u7UfNmfUzfEl3K1hp0Zv7n',

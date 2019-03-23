@@ -89,6 +89,7 @@ $this->title = Yii::t('app', 'Item properties');
                                     [
                                         'class' => 'mf-grid-control-btn',
                                         'data-ajax-load' => '',
+                                        'data-loader' => '',
                                         'data-url' => Yii::$app->urlManager->createUrl([
                                             '/panel/property-value/list',
                                             'propertyId' => $model['id'],
