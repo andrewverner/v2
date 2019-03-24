@@ -1,7 +1,6 @@
 <?php
 /**
  * @var $this yii\web\View
- * @var $searchModel app\models\CategorySearch
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 
@@ -36,7 +35,6 @@ $this->title = Yii::t('app', 'Categories');
 
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
                     'columns' => [
                         'id',
                         'name',
@@ -81,10 +79,10 @@ $this->title = Yii::t('app', 'Categories');
                                         [
                                             'class' => 'mf-grid-control-btn delete-category',
                                             'data-id' => $model['id'],
-                                            'data-confirm' => Yii::t('app', 'Drop category {name}?', ['name' => $model['name']]),
+                                            'data-confirm' => Yii::t('app', 'Drop category {name}? This action will affect all subcategories.', ['name' => $model['name']]),
                                             'data-modal-type' => 'modal-danger',
                                             'data-type' => 'post',
-                                            'data-title' => Yii::t('app', 'Удалить категорию?'),
+                                            'data-title' => Yii::t('app', 'Drop category?'),
                                             'data-pjax' => '#categories-pjax',
                                             'data-msg' => Yii::t('app', 'Category has been dropped'),
                                             'data-url' => Yii::$app->urlManager->createUrl([

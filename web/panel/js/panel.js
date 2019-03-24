@@ -215,6 +215,7 @@ $(function () {
                         $.alert.error(data.responseText);
                     },
                     complete: function () {
+                        $.notify.reload();
                         $.loader.hide();
                     }
                 });

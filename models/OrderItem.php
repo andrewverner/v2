@@ -15,6 +15,10 @@ use Yii;
  * @property double $price
  * @property string $created
  * @property string $updated
+ *
+ * @property Order $order
+ * @property Item $item
+ * @property Size $size
  */
 class OrderItem extends \yii\db\ActiveRecord
 {
@@ -54,5 +58,20 @@ class OrderItem extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public function getOrder()
+    {
+        $this->hasOne(Order::class, ['id' => 'order_id']);
+    }
+
+    public function getItem()
+    {
+        return $this->hasOne(Item::class, ['id' => 'item_id']);
+    }
+
+    public function getSize()
+    {
+        return $this->hasOne(Size::class, ['id' => 'size_id']);
     }
 }

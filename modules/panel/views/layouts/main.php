@@ -8,11 +8,13 @@ use yidas\adminlte\AdminlteAsset;
 use app\modules\panel\assets\FontAwesomeAsset;
 use app\modules\panel\assets\PanelAsset;
 use kartik\select2\Select2Asset;
+use app\modules\panel\assets\NotifyAsset;
 
 AdminlteAsset::register($this);
 FontAwesomeAsset::register($this);
 PanelAsset::register($this);
 Select2Asset::register($this);
+NotifyAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -71,28 +73,11 @@ Select2Asset::register($this);
                     </li>
 
                     <!-- Notifications Menu -->
-                    <li class="dropdown notifications-menu">
-                        <!-- Menu toggle button -->
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="far fa-bell"></i>
-                            <span class="label label-warning">10</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">You have 10 notifications</li>
-                            <li>
-                                <!-- Inner Menu: contains the notifications -->
-                                <ul class="menu">
-                                    <li><!-- start notification -->
-                                        <a href="#">
-                                            <i class="far fa-bell text-aqua"></i> 5 new members joined today
-                                        </a>
-                                    </li>
-                                    <!-- end notification -->
-                                </ul>
-                            </li>
-                            <li class="footer"><a href="#">View all</a></li>
-                        </ul>
+
+                    <li class="dropdown notifications-menu" id="notification-widget">
+                        <?= \app\modules\panel\widgets\NotificationWidget::widget(); ?>
                     </li>
+
                     <!-- Tasks Menu -->
                     <li class="dropdown tasks-menu">
                         <!-- Menu Toggle Button -->

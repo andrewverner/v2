@@ -5,6 +5,7 @@ namespace app\modules\panel\controllers;
 use Yii;
 use app\models\Category;
 use app\models\CategorySearch;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\BadRequestHttpException;
@@ -48,12 +49,13 @@ class CategoryController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => new ActiveDataProvider([
+                'query' => Category::find()->where('depth > 0'),
+                'pagination' => [
+                    'pageSize' => 25,
+                ],
+            ]),
         ]);
     }
 

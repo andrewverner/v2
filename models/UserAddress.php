@@ -21,6 +21,8 @@ use Yii;
  * @property string $kladr_id
  * @property string $fias_id
  * @property string $unrestricted_value
+ *
+ * @property User $user
  */
 class UserAddress extends \yii\db\ActiveRecord
 {
@@ -68,5 +70,10 @@ class UserAddress extends \yii\db\ActiveRecord
             'fias_id' => Yii::t('app', 'Fias ID'),
             'unrestricted_value' => Yii::t('app', 'Unrestricted Value'),
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

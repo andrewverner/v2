@@ -2,6 +2,8 @@
 
 namespace app\modules\panel\controllers;
 
+use app\models\OrderItem;
+use app\modules\panel\models\Notification;
 use Yii;
 use app\models\Size;
 use app\modules\panel\models\SizeSearch;
@@ -81,6 +83,19 @@ class SizeController extends Controller
     {
         if (!$model = Size::findOne($id)) {
             throw new NotFoundHttpException(Yii::t('app', 'Size not found'));
+        }
+
+        if (!$items = OrderItem::find()->where(['size_id' => $model->id])->all()) {
+            Notification::add(
+                'Can not drop size {value} (ID#{id}). There are order items which use this value. If you really want to delete this size, you have to delete order items records from DB.',
+                [
+                    'value' => $model->value,
+                    'id' => $model->id,
+                ],
+                Notification::TYPE_ERROR
+            );
+
+            throw new BadRequestHttpException(Yii::t('app', 'Can not drop size. This action may cause data inconsistency. For more details please refer to notifications'));
         }
 
         $model->delete();

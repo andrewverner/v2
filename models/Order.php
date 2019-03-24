@@ -17,6 +17,11 @@ use Yii;
  * @property int $status
  * @property string $created
  * @property string $updated
+ *
+ * @property User $user
+ * @property UserAddress $address
+ * @property OrderItem[] $items
+ * @property OrderDeliveryInfo $deliveryInfo
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -59,5 +64,25 @@ class Order extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getAddress()
+    {
+        return $this->hasOne(UserAddress::class, ['id' => 'address_id']);
+    }
+
+    public function getDeliveryInfo()
+    {
+        return $this->hasOne(OrderDeliveryInfo::class, ['order_id' => 'id']);
+    }
+
+    public function getItems()
+    {
+        return $this->hasMany(OrderItem::class, ['order_id' => 'id']);
     }
 }
