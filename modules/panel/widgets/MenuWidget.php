@@ -20,6 +20,7 @@ class MenuWidget extends Widget
                 new MenuItem('Sizes', 'fas fa-filter', '/panel/size'),
                 new MenuItem('Properties', 'fas fa-filter', '/panel/property'),
                 new MenuItem('Items', 'fas fa-boxes', '/panel/item'),
+                new MenuItem('Stores', 'fas fa-warehouse', '/panel/store'),
             ]),
             new MenuItem('Content', 'far fa-newspaper', null, [
                 new MenuItem('Pages', 'fas fa-file-alt', '/panel/page'),

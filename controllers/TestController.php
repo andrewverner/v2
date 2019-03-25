@@ -10,6 +10,7 @@ namespace app\controllers;
 
 use app\components\Yii;
 use app\models\Category;
+use app\models\Item;
 use app\models\User;
 use yii\base\Event;
 use yii\web\Controller;
@@ -28,6 +29,7 @@ class TestController extends \app\components\Controller
 
     public function actionIndex()
     {
-        var_dump(Yii::app);
+        $item = Item::findOne(2);
+        $item->decreaseQuantity(13);
     }
 }

@@ -22,6 +22,8 @@ use yii\web\IdentityInterface;
  * @property string $middle_name
  * @property string $phone
  *
+ * @property string $fullName
+ *
  * @property Order[] $orders
  * @property UserAddress[] $addresses
  * @property ActiveDataProvider $addressesDataProvider
@@ -52,7 +54,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['username', 'password'], 'required'],
             [['active', 'blocked'], 'integer'],
             [['created'], 'safe'],
-            [['username', 'email', 'first_name', 'last_name' ,'middle_name' ,'phone'], 'string', 'max' => 45],
+            [['username', 'email', 'first_name', 'last_name', 'middle_name', 'phone'], 'string', 'max' => 45],
             [['password'], 'string', 'max' => 255],
             [['username', 'email'], 'checkForUnique']
         ];
@@ -172,5 +174,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
         Hash::create($user->id);
+    }
+
+    public function getFullName($withUsername = false)
+    {
+        $fullName = implode(' ', array_filter([
+            $this->last_name, $this->first_name, $this->middle_name
+        ]));
+
+        if ($fullName) {
+            return $fullName . ($withUsername ? " ({$this->username})" : '');
+        }
+
+        return $this->username;
     }
 }

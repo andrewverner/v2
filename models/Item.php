@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\modules\panel\models\Notification;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -23,6 +24,8 @@ use yii\db\Expression;
  * @property ItemImage[] $imageRels
  * @property ItemPropertyValueRel[] $propertyRels
  * @property Seo $seo
+ * @property ItemReserve[] $reserves
+ * @property OrderItem[] $orderItems
  */
 class Item extends ActiveRecord
 {
@@ -34,6 +37,9 @@ class Item extends ActiveRecord
         return 'item';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function behaviors()
     {
         return [
@@ -78,12 +84,17 @@ class Item extends ActiveRecord
         ];
     }
 
+    /**
+     * @return ItemCategory[]|null
+     */
     public function getCategoryRels()
     {
         return $this->hasMany(ItemCategory::className(), ['item_id' => 'id']);
     }
 
     /**
+     * Append item to category
+     *
      * @param Category $category
      * @return bool
      */
@@ -110,11 +121,18 @@ class Item extends ActiveRecord
         return ItemCategory::findOne(['item_id' => $this->id, 'category_id' => $categoryId]);
     }
 
+    /**
+     * @return Size[]|null
+     */
     public function getSizeRels()
     {
         return $this->hasMany(ItemSize::className(), ['item_id' => 'id']);
     }
 
+    /**
+     * @param Size $size
+     * @return bool
+     */
     public function addSize(Size $size)
     {
         $rel = $this->getSizeRel($size->id);
@@ -152,6 +170,21 @@ class Item extends ActiveRecord
         return $this->hasOne(Seo::class, ['entity_id' => 'id'])->where(['entity_type' => 'Item']);
     }
 
+    public function getReserves()
+    {
+        return $this->hasMany(ItemReserve::class, ['item_id' => 'id']);
+    }
+
+    public function isSoldOut()
+    {
+        $totalQuantity = 0;
+        foreach ($this->reserves as $reserve) {
+            $totalQuantity += $reserve->quantity;
+        }
+
+        return (bool) $totalQuantity;
+    }
+
     public function beforeDelete()
     {
         if ($seo = $this->seo) {
@@ -159,5 +192,42 @@ class Item extends ActiveRecord
         }
 
         return parent::beforeDelete();
+    }
+
+    public function getOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, ['item_id' => 'id']);
+    }
+
+    public function decreaseQuantity($quantity)
+    {
+        while ($quantity > 0) {
+            /**
+             * @var ItemReserve $reserve
+             */
+            $reserve = ItemReserve::find()
+                ->where(['item_id' => $this->id])
+                ->andWhere('quantity > 0')
+                ->one();
+
+            if ($reserve) {
+                if ($reserve->quantity >= $quantity) {
+                    $reserve->quantity -= $quantity;
+                    $reserve->save();
+                    $quantity = 0;
+                } else {
+                    $quantity -= $reserve->quantity;
+                    $reserve->quantity = 0;
+                    $reserve->save();
+                }
+            } else {
+                Notification::add(
+                    'We are run out of item "{title}", {quantity} needed',
+                    ['title' => $this->title, 'quantity' => $quantity],
+                    Notification::TYPE_WARNING
+                );
+                break;
+            }
+        }
     }
 }

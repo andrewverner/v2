@@ -39,6 +39,9 @@ class Category extends ActiveRecord
         ];
     }
 
+    /**
+     * @return array
+     */
     public function transactions()
     {
         return [

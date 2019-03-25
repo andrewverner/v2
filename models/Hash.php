@@ -78,6 +78,13 @@ class Hash extends ActiveRecord
         ];
     }
 
+    /**
+     * Create new or update old hash
+     *
+     * @param $userId
+     * @param int $type
+     * @return string
+     */
     public static function create($userId, $type = self::TYPE_ACTIVATE)
     {
         $model = self::get($userId, $type);
@@ -95,16 +102,20 @@ class Hash extends ActiveRecord
         return $model->hash;
     }
 
-    public static function get($userId, $type)
-    {
-
-    }
-
+    /**
+     * Is hash expired
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function isExpired()
     {
         return (new \DateTime() >= new \DateTime($this->expired_at));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function beforeSave($insert)
     {
         $this->updated = new Expression('NOW()');
@@ -112,12 +123,20 @@ class Hash extends ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    /**
+     * Is hash valid
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function isValid()
     {
         return !$this->isExpired() && !$this->used;
     }
 
     /**
+     * Returns hash by value
+     *
      * @param $hash
      * @return Hash|null
      */
@@ -131,6 +150,11 @@ class Hash extends ActiveRecord
         return $hash;
     }
 
+    /**
+     * Returns user that related to hash
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);

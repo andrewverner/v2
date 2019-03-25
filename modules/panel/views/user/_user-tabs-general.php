@@ -5,6 +5,7 @@
 
 <?php \yii\widgets\Pjax::begin(['id' => 'user-pjax']); ?>
 
+<?php if (Yii::$app->user->id != $model->id): ?>
 <p class="pull-right">
     <?= \yii\helpers\Html::tag(
         'span',
@@ -36,14 +37,19 @@
         ]
     ) ?>
 </p>
+<?php endif; ?>
 
 <?= \yii\widgets\DetailView::widget([
     'model' => $model,
     'attributes' => [
         'id',
         'username',
+        'last_name',
+        'first_name',
+        'middle_name',
         'password',
         'email:email',
+        'phone',
         'active',
         'blocked',
         'created',

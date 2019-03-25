@@ -5,29 +5,26 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "order_item".
+ * This is the model class for table "item_reserve".
  *
  * @property int $id
- * @property int $order_id
  * @property int $item_id
- * @property int $size_id
+ * @property int $store_id
  * @property int $quantity
- * @property double $price
  * @property string $created
  * @property string $updated
  *
- * @property Order $order
  * @property Item $item
- * @property Size $size
+ * @property Store $store
  */
-class OrderItem extends \yii\db\ActiveRecord
+class ItemReserve extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'order_item';
+        return 'item_reserve';
     }
 
     /**
@@ -36,9 +33,8 @@ class OrderItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'item_id', 'price'], 'required'],
-            [['order_id', 'item_id', 'size_id', 'quantity'], 'integer'],
-            [['price'], 'number'],
+            [['item_id', 'store_id'], 'required'],
+            [['item_id', 'store_id', 'quantity'], 'integer'],
             [['created', 'updated'], 'safe'],
         ];
     }
@@ -50,19 +46,12 @@ class OrderItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'order_id' => Yii::t('app', 'Order ID'),
             'item_id' => Yii::t('app', 'Item ID'),
-            'size_id' => Yii::t('app', 'Size ID'),
+            'store_id' => Yii::t('app', 'Store ID'),
             'quantity' => Yii::t('app', 'Quantity'),
-            'price' => Yii::t('app', 'Price'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
-    }
-
-    public function getOrder()
-    {
-        return $this->hasOne(Order::class, ['id' => 'order_id']);
     }
 
     public function getItem()
@@ -70,8 +59,8 @@ class OrderItem extends \yii\db\ActiveRecord
         return $this->hasOne(Item::class, ['id' => 'item_id']);
     }
 
-    public function getSize()
+    public function getStore()
     {
-        return $this->hasOne(Size::class, ['id' => 'size_id']);
+        return $this->hasOne(Store::class, ['id' => 'store_id']);
     }
 }

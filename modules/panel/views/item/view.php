@@ -35,12 +35,20 @@ $this->params['breadcrumbs'][$model->title] = Yii::$app->urlManager->createUrl([
             $this->render('tabs-properties', ['model' => $model])
         ); ?>
         <?php $tabs->addTab(
+            Yii::t('app', 'Reserves'),
+            $this->render('tabs-reserves', ['model' => $model])
+        ); ?>
+        <?php $tabs->addTab(
             Yii::t('app', 'Images'),
             $this->render('tabs-images', ['model' => $model, 'uploadModel' => $uploadModel])
         ); ?>
         <?php $tabs->addTab(
             Yii::t('app', 'SEO'),
             $this->render('tabs-seo', ['model' => $model])
+        ); ?>
+        <?php $tabs->addTab(
+            Yii::t('app', 'In orders'),
+            $this->render('tabs-orders', ['model' => $model])
         ); ?>
         <?php \app\modules\panel\widgets\TabsWidget::end(); ?>
     </div>

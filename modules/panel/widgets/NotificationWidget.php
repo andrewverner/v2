@@ -15,7 +15,7 @@ class NotificationWidget extends Widget
 {
     public function run()
     {
-        $models = Notification::find()->where(['viewed' => 0])->all();
+        $models = Notification::find()->where(['viewed' => 0])->orderBy(['datetime' => SORT_DESC])->all();
 
         return $this->render('notification', ['models' => $models]);
     }

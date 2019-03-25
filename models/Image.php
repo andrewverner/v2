@@ -57,6 +57,11 @@ class Image extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Returns image source file path
+     *
+     * @return string
+     */
     public function getSource()
     {
         return "{$this->path}{$this->name}";
