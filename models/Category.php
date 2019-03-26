@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\behaviors\SeoBehavior;
 use app\components\LogBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
 use Yii;
@@ -35,6 +36,11 @@ class Category extends ActiveRecord
             ],
             [
                 'class' => LogBehavior::className(),
+            ],
+
+            [
+                'class' => SeoBehavior::className(),
+                'model' => $this,
             ],
         ];
     }
@@ -100,13 +106,5 @@ class Category extends ActiveRecord
     public function getParentNode()
     {
         return $this->parents(1)->one();
-    }
-
-    /**
-     * @return Seo|null
-     */
-    public function getSeo()
-    {
-        return $this->hasOne(Seo::className(), ['entity_id' => 'id'])->andWhere(['entity_type' => 'category']);
     }
 }

@@ -30,6 +30,6 @@ class TestController extends \app\components\Controller
     public function actionIndex()
     {
         $item = Item::findOne(2);
-        $item->decreaseQuantity(13);
+        var_dump($item->seo->keywords);
     }
 }

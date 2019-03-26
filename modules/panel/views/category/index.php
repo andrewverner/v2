@@ -69,7 +69,7 @@ $this->title = Yii::t('app', 'Categories');
                                             'data-msg' => Yii::t('app', 'Seo record has been saved'),
                                             'data-url' => Yii::$app->urlManager->createUrl([
                                                 '/panel/seo/form-by-entity',
-                                                'type' => 'Category',
+                                                'type' => \app\models\Category::class,
                                             ]),
                                         ]
                                     ),

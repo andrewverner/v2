@@ -36,6 +36,7 @@ class Size extends \yii\db\ActiveRecord
         return [
             [['created'], 'safe'],
             [['value'], 'string', 'max' => 10],
+            [['value'], 'filter', 'filter' => 'trim'],
         ];
     }
 

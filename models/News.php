@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\behaviors\SeoBehavior;
 use Yii;
 
 /**
@@ -18,6 +19,16 @@ use Yii;
  */
 class News extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => SeoBehavior::className(),
+                'model' => $this,
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -53,11 +64,6 @@ class News extends \yii\db\ActiveRecord
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
-    }
-
-    public function getSeo()
-    {
-        return $this->hasOne(Seo::class, ['entity_id' => 'id'])->where(['entity_type' => 'News']);
     }
 
     public function beforeDelete()

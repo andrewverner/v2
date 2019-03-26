@@ -95,19 +95,19 @@ class SeoController extends Controller
 
         if ($model->isNewRecord) {
             switch ($type) {
-                case 'Item':
+                case Item::class:
                     $entityModel = Item::findOne($id);
                     $model->title = $entityModel->title ?? null;
                     break;
-                case 'Page':
+                case Page::class:
                     $entityModel = Page::findOne($id);
                     $model->title = $entityModel->title ?? null;
                     break;
-                case 'News':
+                case News::class:
                     $entityModel = News::findOne($id);
                     $model->title = $entityModel->title ?? null;
                     break;
-                case 'Category':
+                case Category::class:
                     $entityModel = Category::findOne($id);
                     $model->title = $entityModel->name ?? null;
                     break;

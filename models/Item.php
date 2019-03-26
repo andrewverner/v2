@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\behaviors\SeoBehavior;
 use app\modules\panel\models\Notification;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -50,6 +51,10 @@ class Item extends ActiveRecord
                 ],
                 // if you're using datetime instead of UNIX timestamp:
                 'value' => new Expression('NOW()'),
+            ],
+            [
+                'class' => SeoBehavior::className(),
+                'model' => $this,
             ],
         ];
     }
@@ -163,11 +168,6 @@ class Item extends ActiveRecord
             ->innerJoinWith(['propertyValue'])
             ->innerJoin(ItemProperty::tableName() . ' ip', 'ip.id = item_property_value.property_id')
             ->orderBy(['ip.title' => SORT_ASC, 'item_property_value.value' => SORT_ASC]);
-    }
-
-    public function getSeo()
-    {
-        return $this->hasOne(Seo::class, ['entity_id' => 'id'])->where(['entity_type' => 'Item']);
     }
 
     public function getReserves()

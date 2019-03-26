@@ -15,7 +15,7 @@ use \yii\widgets\DetailView;
     <span data-get-form data-loader data-type="get" data-pjax="#seo" class="btn btn-primary btn-sm" data-id="<?= $model->id ?>"
           data-url="<?= Yii::$app->urlManager->createUrl([
               '/panel/seo/form-by-entity',
-              'type' => 'Page',
+              'type' => \app\models\Page::class,
           ]) ?>" data-msg="<?= Yii::t('app', 'Seo record has been saved') ?>">
         <i class="fas fa-edit"></i> <?= Yii::t('app', 'Edit'); ?>
     </span>
