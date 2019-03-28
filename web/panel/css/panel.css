@@ -130,3 +130,9 @@ ul.property-value-list li.active:after {
     font-size: 11px;
     font-weight: 700;
 }
+
+#property-list, #property-value-list {
+    margin: 10px 0;
+    overflow: hidden scroll;
+    max-height: 200px;
+}

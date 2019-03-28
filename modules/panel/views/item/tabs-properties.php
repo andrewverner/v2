@@ -7,8 +7,6 @@
  *
  * @var \app\models\Item $model
  */
-
-use kartik\select2\Select2;
 ?>
 <div>
     <p class="text-right">
@@ -169,7 +167,7 @@ use kartik\select2\Select2;
                     values: values
                 },
                 success: function () {
-                    $.pjax.reload({container: '#property-pjax'});
+                    /*$.pjax.reload({container: '#property-pjax'});*/
                 },
                 error: function (data) {
                     $.alert.error(data.responseText);

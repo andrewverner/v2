@@ -8,8 +8,10 @@ use app\models\ItemImage;
 use app\models\ItemProperty;
 use app\models\ItemPropertyValue;
 use app\models\ItemPropertyValueRel;
+use app\models\ItemReserve;
 use app\models\ItemSize;
 use app\models\Size;
+use app\modules\panel\models\Notification;
 use app\modules\panel\models\UploadModel;
 use Yii;
 use app\models\Item;
@@ -190,7 +192,7 @@ class ItemController extends Controller
     public function actionDropCategory($id)
     {
         if (!$rel = ItemCategory::findOne($id)) {
-            return false;
+            throw new NotFoundHttpException(Yii::t('app', 'Category not found'));
         }
 
         return $rel->delete();
@@ -202,12 +204,28 @@ class ItemController extends Controller
         $sizeIds = Yii::$app->request->post('sizes');
 
         if (!$sizeIds || !$itemId) {
-            return false;
+            throw new BadRequestHttpException(Yii::t('app', 'Invalid data'));
         }
 
         $item = Item::findOne($itemId);
         if (!$item) {
-            return false;
+            throw new  NotFoundHttpException(Yii::t('app', 'Item not found'));
+        }
+
+        if (ItemReserve::find()
+            ->where(['item_id' => $item->id])
+            ->andWhere('size_id IS NULL')
+            ->exists())
+        {
+            Notification::add(
+                'Item #{id} "{title}" has reserves without size relation. In order to add a size to this item you have to delete all related reserves',
+                [
+                    'title' => $item->title,
+                    'id' => $item->id,
+                ],
+                Notification::TYPE_ERROR
+            );
+            throw new BadRequestHttpException(Yii::t('app', 'You can not add a size to item'));
         }
 
         foreach ($sizeIds as $sizeId) {
@@ -219,8 +237,6 @@ class ItemController extends Controller
 
             $item->addSize($size);
         }
-
-        return true;
     }
 
     public function actionDropSize($id)

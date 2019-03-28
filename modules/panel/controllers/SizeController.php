@@ -100,4 +100,11 @@ class SizeController extends Controller
 
         $model->delete();
     }
+
+    public function actionListForm()
+    {
+        return $this->renderPartial('_list-form', [
+            'models' => Size::find()->all(),
+        ]);
+    }
 }

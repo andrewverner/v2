@@ -7,14 +7,25 @@
  *
  * @var \app\models\Item $model
  */
-
-use kartik\select2\Select2;
 ?>
 <div>
     <div class="text-right">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sizeModal">
+        <?= \yii\helpers\Html::tag(
+            'span',
+            '<i class="fas fa-plus"></i> ' . Yii::t('app', 'Add size'),
+            [
+                'data-get-form' => '',
+                'data-loader' => '',
+                'data-url' => Yii::$app->urlManager->createUrl('/panel/size/list-form'),
+                'data-type' => 'post',
+                'data-pjax' => '#size-pjax',
+                'data-msg' => Yii::t('app', 'Data has been saved'),
+                'class' => 'btn btn-primary btn-sm',
+            ]
+        ); ?>
+        <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sizeModal">
             <i class="fas fa-plus"></i> Add size
-        </button>
+        </button>-->
     </div>
     <?php if (!$model->sizeRels): ?>
         <div class="alert alert-info margin-top">
@@ -80,15 +91,15 @@ use kartik\select2\Select2;
     <?php endif; ?>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="sizeModal" data-backdrop="false" data-keyboard="false">
+<!--<div class="modal fade" tabindex="-1" role="dialog" id="sizeModal" data-backdrop="false" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?= Yii::t('app', 'Add size to item') ?></h4>
+                <h4 class="modal-title"><?/*= Yii::t('app', 'Add size to item') */?></h4>
             </div>
             <div class="modal-body">
-                <?= Select2::widget([
+                <?/*= Select2::widget([
                     'name' => 'size',
                     'data' => \yii\helpers\ArrayHelper::map(\app\models\Size::find()->all(), 'id', 'value'),
                     'options' => [
@@ -96,7 +107,7 @@ use kartik\select2\Select2;
                         'placeholder' => Yii::t('app', 'Select size'),
                         'id' => 'item-size',
                     ]
-                ]); ?>
+                ]); */?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -104,4 +115,4 @@ use kartik\select2\Select2;
             </div>
         </div>
     </div>
-</div>
+</div>-->
