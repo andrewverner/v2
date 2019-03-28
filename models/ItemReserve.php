@@ -10,12 +10,14 @@ use Yii;
  * @property int $id
  * @property int $item_id
  * @property int $store_id
+ * @property int $size_id
  * @property int $quantity
  * @property string $created
  * @property string $updated
  *
  * @property Item $item
  * @property Store $store
+ * @property ItemSize $sizeRel
  */
 class ItemReserve extends \yii\db\ActiveRecord
 {
@@ -34,7 +36,7 @@ class ItemReserve extends \yii\db\ActiveRecord
     {
         return [
             [['item_id', 'store_id'], 'required'],
-            [['item_id', 'store_id', 'quantity'], 'integer'],
+            [['item_id', 'store_id', 'quantity', 'size_id'], 'integer'],
             [['created', 'updated'], 'safe'],
         ];
     }
@@ -48,6 +50,7 @@ class ItemReserve extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'item_id' => Yii::t('app', 'Item ID'),
             'store_id' => Yii::t('app', 'Store ID'),
+            'size_id' => Yii::t('app', 'Size ID'),
             'quantity' => Yii::t('app', 'Quantity'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
@@ -62,5 +65,10 @@ class ItemReserve extends \yii\db\ActiveRecord
     public function getStore()
     {
         return $this->hasOne(Store::class, ['id' => 'store_id']);
+    }
+
+    public function getSizeRel()
+    {
+        return $this->hasOne(ItemSize::class, ['item_id' => 'item_id']);
     }
 }

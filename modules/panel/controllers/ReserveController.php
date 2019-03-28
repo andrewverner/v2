@@ -8,6 +8,7 @@
 
 namespace app\modules\panel\controllers;
 
+use app\models\Item;
 use app\models\ItemReserve;
 use app\models\Store;
 use yii\data\ActiveDataProvider;
@@ -39,15 +40,29 @@ class ReserveController extends Controller
         ]);
     }
 
-    public function actionForm($id = null, $itemId = null)
+    public function actionForm($itemId = null, $id = null)
     {
+        if (!$item = Item::findOne($itemId)) {
+            throw new NotFoundHttpException(\Yii::t('app', 'Item not found'));
+        }
+
         $model = $id ? ItemReserve::findOne($id) : new ItemReserve();
         if ($model->isNewRecord) {
-            $model->item_id = $itemId;
+            $model->item_id = $item->id;
         }
         $stores = ArrayHelper::map(Store::find()->orderBy(['title' => SORT_ASC])->all(), 'id', 'title');
+        if ($sizeRels = $item->sizeRels) {
+            $sizes = [];
+            foreach ($sizeRels as $sizeRel) {
+                $sizes[$sizeRel->size->id] = $sizeRel->size->value;
+            }
+        }
 
-        return $this->renderPartial('_form', ['model' => $model, 'stores' => $stores]);
+        return $this->renderPartial('_form', [
+            'model' => $model,
+            'stores' => $stores,
+            'sizes' => $sizes ?? [],
+        ]);
     }
 
     public function actionSave()

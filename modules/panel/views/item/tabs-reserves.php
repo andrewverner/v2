@@ -68,6 +68,15 @@
                         }
                     ],
                     [
+                        'label' => 'Size',
+                        'value' => function ($rel) {
+                            /**
+                             * @var \app\models\ItemReserve $rel
+                             */
+                            return $rel->sizeRel->size->value ?? null;
+                        }
+                    ],
+                    [
                         'label' => 'Quantity',
                         'value' => function ($rel) {
                             /**
@@ -78,7 +87,7 @@
                     ],
                     [
                         'label' => '',
-                        'value' => function ($rel) {
+                        'value' => function ($rel) use ($model) {
                             return implode('', [
                                 \yii\helpers\Html::tag(
                                     'span',
@@ -86,7 +95,10 @@
                                     [
                                         'data-get-form' => '',
                                         'data-loader' => '',
-                                        'data-url' => Yii::$app->urlManager->createUrl('/panel/reserve/form'),
+                                        'data-url' => Yii::$app->urlManager->createUrl([
+                                            '/panel/reserve/form',
+                                            'itemId' => $model->id,
+                                        ]),
                                         'data-type' => 'get',
                                         'data-id' => $rel->id,
                                         'data-pjax' => '#reserve-pjax',

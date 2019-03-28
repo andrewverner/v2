@@ -7,7 +7,8 @@ use yii\widgets\ActiveForm;
  * @var yii\web\View $this
  * @var app\models\ItemReserve $model
  * @var yii\widgets\ActiveForm $form
- * @var \app\models\Store[] $stores
+ * @var array $stores
+ * @var array $sizes
  */
 ?>
 
@@ -19,6 +20,10 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <?= $form->field($model, 'store_id')->dropDownList($stores) ?>
+
+    <?php if ($sizes): ?>
+        <?= $form->field($model, 'size_id')->dropDownList($sizes) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'quantity')->textInput() ?>
 
