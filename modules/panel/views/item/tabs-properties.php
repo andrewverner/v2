@@ -167,7 +167,8 @@
                     values: values
                 },
                 success: function () {
-                    /*$.pjax.reload({container: '#property-pjax'});*/
+                    $('#add-property-modal').modal('hide');
+                    $.pjax.reload({container: '#property-pjax'});
                 },
                 error: function (data) {
                     $.alert.error(data.responseText);

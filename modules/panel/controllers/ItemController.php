@@ -168,12 +168,12 @@ class ItemController extends Controller
         $categories = Yii::$app->request->post('categories');
 
         if (!$categories || !$itemId) {
-            return false;
+            throw new BadRequestHttpException(Yii::t('app', 'Data is invalid'));
         }
 
         $item = Item::findOne($itemId);
         if (!$item) {
-            return false;
+            throw new NotFoundHttpException(Yii::t('app', 'Item not found'));
         }
 
         foreach ($categories as $categoryId) {
@@ -185,8 +185,6 @@ class ItemController extends Controller
 
             $item->addToCategory($category);
         }
-
-        return true;
     }
 
     public function actionDropCategory($id)
@@ -225,7 +223,7 @@ class ItemController extends Controller
                 ],
                 Notification::TYPE_ERROR
             );
-            throw new BadRequestHttpException(Yii::t('app', 'You can not add a size to item'));
+            throw new BadRequestHttpException(Yii::t('app', 'You can not add a size to item. Please refer to notifications for details'));
         }
 
         foreach ($sizeIds as $sizeId) {
@@ -242,7 +240,7 @@ class ItemController extends Controller
     public function actionDropSize($id)
     {
         if (!$rel = ItemSize::findOne($id)) {
-            return false;
+            throw new NotFoundHttpException(Yii::t('app', 'Size relation not found'));
         }
 
         return $rel->delete();
@@ -252,7 +250,7 @@ class ItemController extends Controller
     {
         $item = Item::findOne($id);
         if (!$item) {
-            return false;
+            throw new NotFoundHttpException(Yii::t('app', 'Item not found'));
         }
 
         $uploadModel = new UploadModel();

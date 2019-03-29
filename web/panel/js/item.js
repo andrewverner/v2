@@ -41,8 +41,9 @@ $(function () {
                 $('#item-size').val(null).trigger('change');
                 $.pjax.reload({container: '#size-pjax'});
             },
-            error: function () {
-
+            error: function (data) {
+                $.alert.error(data.responseText);
+                $.notify.reload();
             }
         });
     });

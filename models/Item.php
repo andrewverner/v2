@@ -199,14 +199,17 @@ class Item extends ActiveRecord
         return $this->hasMany(OrderItem::class, ['item_id' => 'id']);
     }
 
-    public function decreaseQuantity($quantity)
+    public function decreaseQuantity($quantity, $sizeId = null)
     {
         while ($quantity > 0) {
             /**
              * @var ItemReserve $reserve
              */
             $reserve = ItemReserve::find()
-                ->where(['item_id' => $this->id])
+                ->where([
+                    'item_id' => $this->id,
+                    'size_id' => $sizeId,
+                ])
                 ->andWhere('quantity > 0')
                 ->one();
 
@@ -221,9 +224,15 @@ class Item extends ActiveRecord
                     $reserve->save();
                 }
             } else {
+                $size = $sizeId ? Size::findOne($sizeId) : null;
+
                 Notification::add(
-                    'We are run out of item "{title}", {quantity} needed',
-                    ['title' => $this->title, 'quantity' => $quantity],
+                    $sizeId
+                        ? 'We are run out of item "{title}" size "{size}", {quantity} needed'
+                        : 'We are run out of item "{title}", {quantity} needed',
+                    array_merge(['title' => $this->title, 'quantity' => $quantity], $sizeId ? [
+                        'size' => $size->value,
+                    ] : []),
                     Notification::TYPE_WARNING
                 );
                 break;
