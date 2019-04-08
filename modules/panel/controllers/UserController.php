@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\NotAcceptableHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -106,6 +107,10 @@ class UserController extends Controller
 
         if (!$user) {
             throw new  NotFoundHttpException(Yii::t('app', 'User not found'));
+        }
+
+        if ($user->id == Yii::$app->user->id) {
+            throw new NotAcceptableHttpException(Yii::t('app', 'You can not block yourself'));
         }
 
         $user->blocked = $user->blocked ? 0 : 1;

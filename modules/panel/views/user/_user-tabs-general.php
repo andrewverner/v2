@@ -47,7 +47,6 @@
         'last_name',
         'first_name',
         'middle_name',
-        'password',
         'email:email',
         'phone',
         'active',

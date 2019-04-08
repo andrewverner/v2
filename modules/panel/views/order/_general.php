@@ -4,8 +4,32 @@
  * @var \app\models\Order $model
  */
 ?>
-<div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        123
-    </div>
-</div>
+<?= \yii\widgets\DetailView::widget([
+    'model' => $model,
+    'attributes' => [
+        'id',
+        [
+            'label' => Yii::t('app', 'User'),
+            'format' => 'html',
+            'value' => function ($model) {
+                /**
+                 * @var \app\models\Order $model
+                 */
+                return $model->user
+                    ? \yii\helpers\Html::a(
+                        $model->user->getFullName(),
+                        Yii::$app->urlManager->createUrl([
+                            '/panel/user/view',
+                            'id' => $model->user_id,
+                        ])
+                    )
+                    : Yii::t('app', 'Unregistered user');
+            }
+        ],
+        'contact_name',
+        'email:email',
+        'phone',
+        'delivery_type',
+        'created'
+    ]
+]); ?>

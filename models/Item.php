@@ -27,6 +27,7 @@ use yii\db\Expression;
  * @property Seo $seo
  * @property ItemReserve[] $reserves
  * @property OrderItem[] $orderItems
+ * @property string $mainImage
  */
 class Item extends ActiveRecord
 {
@@ -160,6 +161,17 @@ class Item extends ActiveRecord
     public function getImageRels()
     {
         return $this->hasMany(ItemImage::className(), ['item_id' => 'id']);
+    }
+
+    public function getMainImage()
+    {
+        foreach ($this->imageRels as $imageRel) {
+            if ($imageRel->is_main) {
+                return $imageRel->image->getSource();
+            }
+        }
+
+        return $this->imageRels[0]->image->getSource() ?? Yii::$app->params['no-image'];
     }
 
     public function getPropertyRels()

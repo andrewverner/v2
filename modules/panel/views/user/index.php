@@ -33,12 +33,15 @@ $this->title = Yii::t('app', 'Users');
                 )
             ); ?>
 
-            <?php Pjax::begin(['id' => 'items-pjax']); ?>
+            <?php Pjax::begin(['id' => 'user-pjax']); ?>
             <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
+                //'filterModel' => $searchModel,
+                'rowOptions' => function ($model) {
+                    return $model['blocked'] ? ['class' => 'bg-warning'] : null;
+                },
                 'columns' => [
                     'id',
                     [
@@ -77,24 +80,26 @@ $this->title = Yii::t('app', 'Users');
                                     ]),
                                     ['class' => 'mf-grid-control-btn']
                                 ),
-                                /*\yii\helpers\Html::tag(
+                                \yii\helpers\Html::tag(
                                     'span',
-                                    '<i class="far fa-trash-alt"></i>',
+                                    $model['blocked'] ? '<i class="fas fa-lock-open"></i>' : '<i class="fas fa-lock"></i>',
                                     [
                                         'class' => 'mf-grid-control-btn',
                                         'data-id' => $model['id'],
-                                        'data-confirm' => Yii::t('app', 'Drop item {title}?', ['title' => $model['title']]),
-                                        'data-modal-type' => 'modal-danger',
+                                        'data-confirm' => Yii::t('app',
+                                            $model['blocked'] ? 'Unblock user {username}?' : 'Block user {username}?',
+                                            ['username' => $model['username']]),
+                                        'data-modal-type' => $model['blocked'] ? 'modal-success' : 'modal-warning',
                                         'data-type' => 'post',
-                                        'data-title' => Yii::t('app', 'Delete item?'),
-                                        'data-pjax' => '#items-pjax',
-                                        'data-msg' => Yii::t('app', 'Item has been dropped'),
+                                        'data-title' => Yii::t('app', $model['blocked'] ? 'Unblock user?' : 'Block user?'),
+                                        'data-pjax' => '#user-pjax',
+                                        'data-msg' => Yii::t('app', 'User has been ' . ($model['blocked'] ? 'unblocked' : 'blocked')),
                                         'data-url' => Yii::$app->urlManager->createUrl([
-                                            '/panel/item/drop',
+                                            '/panel/user/block',
                                             'id' => $model['id']
                                         ]),
                                     ]
-                                ),*/
+                                ),
                             ]);
                         }
                     ]

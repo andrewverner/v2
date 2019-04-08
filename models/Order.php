@@ -14,7 +14,7 @@ use Yii;
  * @property string $email
  * @property string $phone
  * @property int $delivery_type
- * @property int $status
+ * @property int $status_id
  * @property string $created
  * @property string $updated
  *
@@ -22,6 +22,9 @@ use Yii;
  * @property UserAddress $address
  * @property OrderItem[] $items
  * @property OrderDeliveryInfo $deliveryInfo
+ * @property OrderStatus $status
+ *
+ * @property float $price
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -39,7 +42,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'address_id', 'delivery_type', 'status'], 'integer'],
+            [['user_id', 'address_id', 'delivery_type', 'status_id'], 'integer'],
             [['contact_name', 'email', 'phone'], 'required'],
             [['created', 'updated'], 'safe'],
             [['contact_name', 'email'], 'string', 'max' => 255],
@@ -60,7 +63,7 @@ class Order extends \yii\db\ActiveRecord
             'email' => Yii::t('app', 'Email'),
             'phone' => Yii::t('app', 'Phone'),
             'delivery_type' => Yii::t('app', 'Delivery Type'),
-            'status' => Yii::t('app', 'Status'),
+            'status_id' => Yii::t('app', 'Status ID'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
@@ -76,6 +79,11 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(UserAddress::class, ['id' => 'address_id']);
     }
 
+    public function getStatus()
+    {
+        return $this->hasOne(OrderStatus::class, ['id' => 'status_id']);
+    }
+
     public function getDeliveryInfo()
     {
         return $this->hasOne(OrderDeliveryInfo::class, ['order_id' => 'id']);
@@ -84,5 +92,20 @@ class Order extends \yii\db\ActiveRecord
     public function getItems()
     {
         return $this->hasMany(OrderItem::class, ['order_id' => 'id']);
+    }
+
+    public function getPrice()
+    {
+        return array_reduce($this->items, function ($carry, $item) {
+            /**
+             * @var OrderItem $item
+             */
+
+            if ($item->status->isPositive()) {
+                return $carry += $item->price * $item->quantity;
+            }
+
+            return $carry;
+        });
     }
 }

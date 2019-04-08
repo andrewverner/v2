@@ -136,3 +136,15 @@ ul.property-value-list li.active:after {
     overflow: hidden scroll;
     max-height: 200px;
 }
+
+.bg-warning {
+    background-color: #f39c12!important;
+}
+
+.item-thumbnail {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background-size: cover;
+    background-position: 50% 50%;
+}

@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
-$this->title = "User: {$model->username}";
+$this->title = Yii::t('app', 'User: {username}', ['username' => $model->getFullName(true)]);
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="user-view">

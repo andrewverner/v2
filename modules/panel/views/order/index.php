@@ -34,15 +34,42 @@ $this->title = Yii::t('app', 'Orders');
         <?= \yii\grid\GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
-                'id',
                 [
-                    'label' => Yii::t('app', 'User'),
+                    'label' => 'ID',
+                    'format' => 'html',
                     'value' => function ($model) {
                         /**
                          * @var \app\models\Order $model
                          */
+                        return \yii\helpers\Html::a(
+                            $model->id,
+                            Yii::$app->urlManager->createUrl([
+                                '/panel/order/view',
+                                'id' => $model->id,
+                            ])
+                        );
+                    }
+                ],
+                [
+                    'label' => Yii::t('app', 'User'),
+                    'format' => 'html',
+                    'value' => function ($model) {
+                        /**
+                         * @var \app\models\Order $model
+                         */
+                        $user = $model->user;
 
-                        return $model->user->username;
+                        if (!$user) {
+                            return Yii::t('app', 'Unregistered user');
+                        }
+
+                        return \yii\helpers\Html::a(
+                            $user->getFullName(true),
+                            Yii::$app->urlManager->createUrl([
+                                '/panel/user/view',
+                                'id' => $user->id,
+                            ])
+                        );
                     }
                 ]
             ]
