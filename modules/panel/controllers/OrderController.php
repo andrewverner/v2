@@ -9,9 +9,12 @@
 namespace app\modules\panel\controllers;
 
 use app\models\Order;
+use app\models\OrderStatus;
 use app\models\User;
 use yii\data\ArrayDataProvider;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class OrderController extends Controller
 {
@@ -57,5 +60,39 @@ class OrderController extends Controller
         return $this->render('view', [
             'model' => Order::findOne($id),
         ]);
+    }
+
+    public function actionStatusFlow()
+    {
+        if (!$id = \Yii::$app->request->post('id')) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Invalid data'));
+        }
+
+        if (!$order = Order::findOne($id)) {
+            throw new NotFoundHttpException(\Yii::t('app', 'Order not found'));
+        }
+
+        return $this->renderPartial('_status-flow', ['model' => $order->status]);
+    }
+
+    public function actionChangeStatus()
+    {
+        $id = \Yii::$app->request->post('id');
+        $statusId = \Yii::$app->request->post('status');
+
+        if (!$id || !$statusId) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Invalid data'));
+        }
+
+        if (!$order = Order::findOne($id)) {
+            throw new NotFoundHttpException(\Yii::t('app', 'Order not found'));
+        }
+
+        if (!$status = OrderStatus::findOne($id)) {
+            throw new NotFoundHttpException(\Yii::t('app', 'Status not found'));
+        }
+
+        $order->status_id = $statusId;
+        $order->save();
     }
 }

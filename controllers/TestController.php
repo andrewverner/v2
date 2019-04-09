@@ -8,12 +8,7 @@
 
 namespace app\controllers;
 
-use app\components\Yii;
-use app\models\Category;
-use app\models\Item;
-use app\models\User;
-use yii\base\Event;
-use yii\web\Controller;
+use app\models\OrderStatus;
 
 class TestController extends \app\components\Controller
 {
@@ -29,7 +24,8 @@ class TestController extends \app\components\Controller
 
     public function actionIndex()
     {
-        $item = Item::findOne(2);
-        var_dump($item->seo->keywords);
+        $status = OrderStatus::findOne(3);
+        var_dump($status->nextStatuses[0]->status->title);
+        var_dump($status->prevStatuses[0]->status->title);
     }
 }

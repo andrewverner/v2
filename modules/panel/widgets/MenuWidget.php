@@ -34,6 +34,8 @@ class MenuWidget extends Widget
                 new MenuItem('SEO', 'fas fa-globe', '/panel/seo'),
                 new MenuItem('Pixels & counters', 'fas fa-scroll', '/panel/counter'),
                 new MenuItem('Url manager', 'fas fa-location-arrow', '/panel/url-manager'),
+                new MenuItem('Order statuses', 'fas fa-cogs', '/panel/order-status'),
+                new MenuItem('Item statuses', 'fas fa-cogs', '/panel/item-status'),
                 new MenuItem('App settings', 'fas fa-cogs', '/panel/settings'),
                 new MenuItem('Logs', 'fas fa-book', '/panel/log'),
             ]),

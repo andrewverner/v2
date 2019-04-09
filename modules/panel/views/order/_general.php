@@ -30,6 +30,15 @@
         'email:email',
         'phone',
         'delivery_type',
+        [
+            'label' => Yii::t('app', 'Delivery address'),
+            'value' => function ($model) {
+                /**
+                 * @var \app\models\Order $model
+                 */
+                return $model->deliveryInfo->unrestricted_value ?? null;
+            }
+        ],
         'created'
     ]
 ]); ?>

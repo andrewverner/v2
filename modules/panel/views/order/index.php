@@ -71,7 +71,21 @@ $this->title = Yii::t('app', 'Orders');
                             ])
                         );
                     }
-                ]
+                ],
+                [
+                    'label' => Yii::t('app', 'Status'),
+                    'format' => 'html',
+                    'value' => function ($model) {
+                        /**
+                         * @var \app\models\Order $model
+                         */
+                        return \yii\helpers\Html::tag('span', $model->status->title, [
+                            'class' => 'order-status-bulge',
+                            'style' => "background-color: {$model->status->color}",
+                        ]);
+                    }
+                ],
+                'created',
             ]
         ]); ?>
 

@@ -148,3 +148,44 @@ ul.property-value-list li.active:after {
     background-size: cover;
     background-position: 50% 50%;
 }
+
+#order-status-box {
+    cursor: pointer;
+}
+
+#order-status-box i.fas {
+    color: #fff;
+}
+
+.order-status-flow-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.order-status-flow {
+    margin: 0;
+    padding: 0;
+    list-style: none inside;
+}
+
+.order-status-flow .btn {
+    width: 100%;
+    border-radius: 0;
+    color: #fff;
+}
+
+.order-status-bulge {
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.order-status-color-box {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #444;
+}
