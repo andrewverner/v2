@@ -69,6 +69,6 @@ class ItemReserve extends \yii\db\ActiveRecord
 
     public function getSizeRel()
     {
-        return $this->hasOne(ItemSize::class, ['item_id' => 'item_id']);
+        return $this->hasOne(ItemSize::class, ['size_id' => 'size_id']);
     }
 }
