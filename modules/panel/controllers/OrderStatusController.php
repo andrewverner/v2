@@ -31,7 +31,12 @@ class OrderStatusController extends Controller
         $id = \Yii::$app->request->post('id');
         $model = $id ? OrderStatus::findOne($id) : new OrderStatus();
 
-        return $this->renderPartial('_form', ['model' => $model]);
+        $colors = array_unique(array_column(OrderStatus::find()->all(), 'color'));
+
+        return $this->renderPartial('_form', [
+            'model' => $model,
+            'colors' => $colors,
+        ]);
     }
 
     public function actionSave()

@@ -87,7 +87,10 @@ class Hash extends ActiveRecord
      */
     public static function create($userId, $type = self::TYPE_ACTIVATE)
     {
-        $model = self::get($userId, $type);
+        $model = self::find()->where([
+            'user_id' => $userId,
+            'type' => $type,
+        ])->one();
 
         if (!$model) {
             $model = new self;

@@ -72,6 +72,7 @@ $this->title = Yii::t('app', 'Orders');
                         );
                     }
                 ],
+                'price',
                 [
                     'label' => Yii::t('app', 'Status'),
                     'format' => 'html',

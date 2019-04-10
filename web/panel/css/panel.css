@@ -171,7 +171,7 @@ ul.property-value-list li.active:after {
 .order-status-flow .btn {
     width: 100%;
     border-radius: 0;
-    color: #fff;
+    font-weight: 700;
 }
 
 .order-status-bulge {
@@ -188,4 +188,14 @@ ul.property-value-list li.active:after {
     width: 20px;
     height: 20px;
     border: 1px solid #444;
+}
+
+.palette .order-status-color-box {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.last-order-status-datetime {
+    font-size: 12px;
+    margin-top: 5px;
 }

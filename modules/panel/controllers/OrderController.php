@@ -10,6 +10,7 @@ namespace app\modules\panel\controllers;
 
 use app\models\Order;
 use app\models\OrderStatus;
+use app\models\OrderStatusLog;
 use app\models\User;
 use yii\data\ArrayDataProvider;
 use yii\web\BadRequestHttpException;
@@ -88,11 +89,13 @@ class OrderController extends Controller
             throw new NotFoundHttpException(\Yii::t('app', 'Order not found'));
         }
 
-        if (!$status = OrderStatus::findOne($id)) {
+        if (!$status = OrderStatus::findOne($statusId)) {
             throw new NotFoundHttpException(\Yii::t('app', 'Status not found'));
         }
 
         $order->status_id = $statusId;
         $order->save();
+
+        OrderStatusLog::create($order, $status);
     }
 }

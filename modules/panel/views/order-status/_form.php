@@ -2,9 +2,12 @@
 
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\OrderStatus */
-/* @var $form yii\widgets\ActiveForm */
+/**
+ * @var $this yii\web\View
+ * @var $model app\models\OrderStatus
+ * @var $form yii\widgets\ActiveForm
+ * @var array $colors
+ */
 ?>
 
 <div class="order-status-form">
@@ -18,6 +21,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textInput() ?>
 
+    <div class="palette">
+        <?php foreach ($colors as $color): ?>
+            <span class="order-status-color-box" style="background-color: <?= $color; ?>" data-color="<?= $color; ?>"></span>
+        <?php endforeach; ?>
+    </div>
     <?= $form->field($model, 'color')->textInput(['id' => 'color-picker']) ?>
 
     <?= $form->field($model, 'is_final')->checkbox() ?>
@@ -34,6 +42,14 @@ use yii\widgets\ActiveForm;
     $(function () {
         $('#color-picker').spectrum({
             preferredFormat: "hex"
+        });
+
+        $(document).on('click', '.palette .order-status-color-box', function () {
+            $('#color-picker').val($(this).data('color'));
+            $('#color-picker').spectrum({
+                preferredFormat: "hex",
+                color: $(this).data('color')
+            });
         });
     });
 </script>

@@ -4,6 +4,10 @@
  * @var \app\models\Order $model
  */
 ?>
+<?php \yii\widgets\Pjax::begin(['id' => 'order-status-pjax']); ?>
+<?= $this->render('_status-flow', ['model' => $model]) ?>
+<?php \yii\widgets\Pjax::end(); ?>
+<hr />
 <?= \yii\widgets\DetailView::widget([
     'model' => $model,
     'attributes' => [
@@ -42,3 +46,14 @@
         'created'
     ]
 ]); ?>
+<?php if ($model->deliveryInfo): ?>
+<p>
+    <?php $map = \app\modules\panel\widgets\YMapWidget::begin(); ?>
+    <?php $map->addPlacemark(new \app\modules\panel\widgets\YMapPlacemark(
+        $model->deliveryInfo->geo_lat,
+        $model->deliveryInfo->geo_lng,
+        $model->deliveryInfo->unrestricted_value
+    )); ?>
+    <?php \app\modules\panel\widgets\YMapWidget::end(); ?>
+</p>
+<?php endif; ?>

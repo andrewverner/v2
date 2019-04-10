@@ -18,6 +18,10 @@ $this->title = Yii::t('app', 'User: {username}', ['username' => $model->getFullN
                 $this->render('_user-tabs-general', ['model' => $model])
             ); ?>
             <?php $tabs->addTab(
+                Yii::t('app', 'Orders'),
+                $this->render('_user-tabs-orders', ['model' => $model])
+            ); ?>
+            <?php $tabs->addTab(
                 Yii::t('app', 'Addresses'),
                 $this->render('_user-tabs-addresses', ['model' => $model])
             ); ?>

@@ -23,6 +23,8 @@ use Yii;
  * @property OrderItem[] $items
  * @property OrderDeliveryInfo $deliveryInfo
  * @property OrderStatus $status
+ * @property OrderStatusLog[] $statusLog
+ * @property OrderStatusLog $lastStatusLog
  *
  * @property float $price
  */
@@ -107,5 +109,22 @@ class Order extends \yii\db\ActiveRecord
 
             return $carry;
         });
+    }
+
+    public function getStatusLog()
+    {
+        return $this->hasMany(OrderStatusLog::class, ['order_id' => 'id']);
+    }
+
+    public function getLastStatusLog()
+    {
+        return OrderStatusLog::find()
+            ->where([
+                'order_id' => $this->id,
+                'status_id' => $this->status_id,
+            ])
+            ->orderBy(['datetime' => SORT_DESC])
+            ->limit(1)
+            ->one();
     }
 }
