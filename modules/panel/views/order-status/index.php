@@ -70,7 +70,7 @@ $this->title = Yii::t('app', 'Order statuses');
 
                         foreach ($availableStatuses as &$availableStatus) {
                             $availableStatus = \yii\helpers\Html::tag('span', $availableStatus->status->title, [
-                                'class' => 'order-status-bulge',
+                                'class' => "order-status-bulge dir-{$availableStatus->direction}",
                                 'style' => "background-color: {$availableStatus->status->color}",
                             ]);
                         }

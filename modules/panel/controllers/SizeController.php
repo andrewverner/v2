@@ -85,7 +85,7 @@ class SizeController extends Controller
             throw new NotFoundHttpException(Yii::t('app', 'Size not found'));
         }
 
-        if (!$items = OrderItem::find()->where(['size_id' => $model->id])->all()) {
+        if (OrderItem::find()->where(['size_id' => $model->id])->all()) {
             Notification::add(
                 'Can not drop size {value} (ID#{id}). There are order items which use this value. If you really want to delete this size, you have to delete order items records from DB.',
                 [

@@ -20,7 +20,7 @@ class m190214_070920_create_log_table extends Migration
             'old_attributes' => $this->string(),
             'new_attributes' => $this->string(),
             'datetime' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

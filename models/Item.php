@@ -16,6 +16,7 @@ use yii\db\Expression;
  * @property string $title
  * @property string $description
  * @property int $price
+ * @property int $discount
  * @property int $published
  * @property string $created
  * @property string $updated
@@ -27,6 +28,8 @@ use yii\db\Expression;
  * @property Seo $seo
  * @property ItemReserve[] $reserves
  * @property OrderItem[] $orderItems
+ * @property ItemItemRel[] $itemRels
+ *
  * @property string $mainImage
  */
 class Item extends ActiveRecord
@@ -68,7 +71,7 @@ class Item extends ActiveRecord
         return [
             [['title', 'price'], 'required'],
             [['description'], 'string'],
-            [['price', 'published'], 'integer'],
+            [['price', 'discount', 'published'], 'integer'],
             [['created', 'updated'], 'safe'],
             [['title'], 'string', 'max' => 255],
         ];
@@ -84,6 +87,7 @@ class Item extends ActiveRecord
             'title' => Yii::t('app', 'Title'),
             'description' => Yii::t('app', 'Description'),
             'price' => Yii::t('app', 'Price'),
+            'discount' => Yii::t('app', 'Discount'),
             'published' => Yii::t('app', 'Published'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
@@ -211,6 +215,11 @@ class Item extends ActiveRecord
         return $this->hasMany(OrderItem::class, ['item_id' => 'id']);
     }
 
+    public function getItemRels()
+    {
+        return $this->hasMany(ItemItemRel::class, ['item_id' => 'id']);
+    }
+
     public function decreaseQuantity($quantity, $sizeId = null)
     {
         while ($quantity > 0) {
@@ -250,5 +259,30 @@ class Item extends ActiveRecord
                 break;
             }
         }
+    }
+
+    public function getReservesAmount($sizeId = null)
+    {
+        $params = ['item_id' => $this->id];
+        if ($sizeId) {
+            $params['size_id'] = $sizeId;
+        }
+
+        $reserves = ItemReserve::find()->where($params)->all();
+        if (!$reserves) {
+            return 0;
+        }
+
+        return array_reduce($reserves, function ($curry, $reserve) {
+            /**
+             * @var ItemReserve $reserve
+             */
+            return $curry += $reserve->quantity;
+        });
+    }
+
+    public function getDiscountPrice()
+    {
+        return $this->price - ($this->price * $this->discount/100);
     }
 }

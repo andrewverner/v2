@@ -16,7 +16,7 @@ class m190323_144722_create_application_settings_table extends Migration
             'id' => $this->primaryKey(),
             'component' => $this->string(255)->notNull(),
             'settings' => $this->string(2048),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

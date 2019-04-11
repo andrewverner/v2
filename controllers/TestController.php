@@ -9,6 +9,7 @@
 namespace app\controllers;
 
 use app\models\OrderStatus;
+use app\models\Promo;
 
 class TestController extends \app\components\Controller
 {
@@ -24,8 +25,7 @@ class TestController extends \app\components\Controller
 
     public function actionIndex()
     {
-        $status = OrderStatus::findOne(3);
-        var_dump($status->nextStatuses[0]->status->title);
-        var_dump($status->prevStatuses[0]->status->title);
+        $reflection = new \ReflectionClass(Promo::class);
+        echo $reflection->getShortName();
     }
 }

@@ -12,6 +12,7 @@ use Yii;
  * @property string $description
  * @property int $is_final
  * @property string $color
+ * @property int $email_notify
  * @property string $created
  * @property string $updated
  *
@@ -35,7 +36,7 @@ class OrderStatus extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['is_final'], 'integer'],
+            [['is_final', 'email_notify'], 'integer'],
             [['created', 'updated'], 'safe'],
             [['title', 'color'], 'string', 'max' => 45],
             [['description'], 'string', 'max' => 255],
@@ -53,6 +54,7 @@ class OrderStatus extends \yii\db\ActiveRecord
             'description' => Yii::t('app', 'Description'),
             'is_final' => Yii::t('app', 'Is Final'),
             'color' => Yii::t('app', 'Color'),
+            'email_notify' => Yii::t('app', 'Email Notify'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];

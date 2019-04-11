@@ -18,7 +18,7 @@ class m190408_123842_create_order_item_status_table extends Migration
             'type' => $this->tinyInteger()->notNull()->defaultValue(1),
             'created' => $this->dateTime()->defaultExpression('NOW()'),
             'updated' => $this->dateTime()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
 
         $this->insert(\app\models\OrderItemStatus::tableName(), ['title' => 'New']);
     }

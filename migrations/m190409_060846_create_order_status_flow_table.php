@@ -19,7 +19,7 @@ class m190409_060846_create_order_status_flow_table extends Migration
             'direction' => $this->tinyInteger()->notNull()->defaultValue(1),
             'created' => $this->dateTime()->defaultExpression('NOW()'),
             'updated' => $this->dateTime()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

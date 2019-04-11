@@ -19,7 +19,7 @@ class m190408_142609_create_order_status_table extends Migration
             'is_final' => $this->tinyInteger()->notNull()->defaultValue(0),
             'created' => $this->dateTime()->defaultExpression('NOW()'),
             'updated' => $this->dateTime()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
 
         $this->insert(\app\models\OrderStatus::tableName(), [
             'title' => 'New',

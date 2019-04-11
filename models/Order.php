@@ -25,6 +25,7 @@ use Yii;
  * @property OrderStatus $status
  * @property OrderStatusLog[] $statusLog
  * @property OrderStatusLog $lastStatusLog
+ * @property DeliveryType $deliveryType
  *
  * @property float $price
  */
@@ -89,6 +90,11 @@ class Order extends \yii\db\ActiveRecord
     public function getDeliveryInfo()
     {
         return $this->hasOne(OrderDeliveryInfo::class, ['order_id' => 'id']);
+    }
+
+    public function getDeliveryType()
+    {
+        return $this->hasOne(DeliveryType::class, ['id' => 'delivery_type']);
     }
 
     public function getItems()

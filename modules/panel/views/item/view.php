@@ -39,6 +39,10 @@ $this->params['breadcrumbs'][$model->title] = Yii::$app->urlManager->createUrl([
             $this->render('tabs-reserves', ['model' => $model])
         ); ?>
         <?php $tabs->addTab(
+            Yii::t('app', 'Related items'),
+            $this->render('tabs-related-items', ['model' => $model])
+        ); ?>
+        <?php $tabs->addTab(
             Yii::t('app', 'Images'),
             $this->render('tabs-images', ['model' => $model, 'uploadModel' => $uploadModel])
         ); ?>

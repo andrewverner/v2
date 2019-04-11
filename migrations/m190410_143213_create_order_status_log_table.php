@@ -17,7 +17,7 @@ class m190410_143213_create_order_status_log_table extends Migration
             'order_id' => $this->integer()->notNull(),
             'status_id' => $this->integer()->notNull(),
             'datetime' => $this->dateTime()->notNull()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**
