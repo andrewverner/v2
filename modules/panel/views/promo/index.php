@@ -4,7 +4,14 @@
  * @var \yii\data\ActiveDataProvider $dataProvider
  */
 
+use app\models\Category;
+use app\models\Item;
 use app\modules\panel\assets\DatePickerAsset;
+use app\modules\panel\widgets\ModalWidget;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use app\modules\panel\widgets\ModalButtonWidget;
+
 DatePickerAsset::register($this);
 
 $this->title = Yii::t('app', 'Promo');
@@ -80,6 +87,22 @@ $this->title = Yii::t('app', 'Promo');
                                     ]),
                                 ]
                             ),
+                            \yii\helpers\Html::tag(
+                                'span',
+                                Yii::t('app', 'Exceptions'),
+                                [
+                                    'class' => 'btn btn-sm btn-primary promo-exception-list-btn',
+                                    'data-ajax-load' => '',
+                                    'data-loader' => '',
+                                    'data-url' => Yii::$app->urlManager->createUrl([
+                                        '/panel/promo-exception/list',
+                                        'id' => $model->id,
+                                    ]),
+                                    'data-type' => 'get',
+                                    'data-target' => '#promo-exception-form-container',
+                                    'data-id' => $model->id,
+                                ]
+                            ),
                         ]);
                     },
                 ],
@@ -90,4 +113,81 @@ $this->title = Yii::t('app', 'Promo');
 
         <?php \app\modules\panel\widgets\BoxWidget::end(); ?>
     </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ajax-pagination" id="promo-exception-form-container"></div>
 </div>
+
+<?php $modal = ModalWidget::begin([
+    'title' => Yii::t('app', 'Add items exceptions'),
+    'id' => 'exceptions-list-modal',
+]) ?>
+<?php $modal->addButton(new ModalButtonWidget([
+    'title' => Yii::t('app', 'Save'),
+    'options' => [
+        'class' => 'btn btn-primary',
+        'id' => 'submit-exceptions',
+        'data-loader' => '',
+    ],
+])); ?>
+<div class="form-group">
+    <label><?= Yii::t('app', 'Items') ?></label>
+    <?= Select2::widget([
+        'name' => 'items',
+        'data' => ArrayHelper::map(Item::find()->all(), 'id', 'title'),
+        'options' => [
+            'multiple' => true,
+            'placeholder' => Yii::t('app', 'Select items'),
+            'id' => 'items-list',
+        ]
+    ]); ?>
+</div>
+<div class="form-group">
+    <label><?= Yii::t('app', 'Categories') ?></label>
+    <?= Select2::widget([
+        'name' => 'size',
+        'data' => ArrayHelper::map(Category::find()->all(), 'id', 'name'),
+        'options' => [
+            'multiple' => true,
+            'placeholder' => Yii::t('app', 'Select categories'),
+            'id' => 'categories-list',
+        ]
+    ]); ?>
+</div>
+<?php ModalWidget::end(); ?>
+
+<script>
+    $(function () {
+        $('#submit-exceptions').click(function () {
+            var promoId = $('#promo-id').val();
+
+            $.ajax({
+                url: '/panel/promo-exception/add',
+                type: 'post',
+                data: {
+                    items: $('#items-list').val(),
+                    categories: $('#categories-list').val(),
+                    promoId: promoId
+                },
+                success: function () {
+                    $.alert.success('<?= Yii::t('app', 'Exceptions have been added') ?>');
+                    $('#promo-exception-form-container').ajaxReload({
+                        url: '/panel/promo-exception/list',
+                        type: 'get',
+                        data: {
+                            id: promoId
+                        }
+                    });
+                    $('#exceptions-list-modal').modal('hide');
+                    $('#items-list').val(null).trigger('change');
+                    $('#categories-list').val(null).trigger('change');
+                },
+                error: function(data) {
+                    $.alert.error(data.responseText);
+                },
+                complete: function () {
+                    $.loader.hide();
+                }
+            });
+        });
+    });
+</script>

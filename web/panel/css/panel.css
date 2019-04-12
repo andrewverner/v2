@@ -199,3 +199,8 @@ ul.property-value-list li.active:after {
     font-size: 12px;
     margin-top: 5px;
 }
+
+.box-header .btn-group .dropdown-menu {
+    left: auto;
+    right: 0;
+}

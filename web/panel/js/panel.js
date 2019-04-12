@@ -272,4 +272,17 @@ $(function () {
     });
 
     $('ul.sidebar-menu li.treeview.menu-open ul.treeview-menu').css({display: 'block'});
+
+    $(document).on('click', '.ajax-pagination ul.pagination a', function (e) {
+        e.preventDefault();
+
+        var $link = $(this);
+        $.ajax({
+            url: $link.attr('href'),
+            type: 'get',
+            success: function (data) {
+                $link.closest('.ajax-pagination').html(data);
+            }
+        });
+    });
 });
