@@ -94,7 +94,9 @@ class OrderController extends Controller
         }
 
         $order->status_id = $statusId;
-        $order->save();
+        if (!$order->save()) {
+            throw new BadRequestHttpException(\Yii::t('app', 'Validation error'));
+        }
 
         OrderStatusLog::create($order, $status);
     }

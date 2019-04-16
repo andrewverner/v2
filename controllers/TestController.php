@@ -25,7 +25,7 @@ class TestController extends \app\components\Controller
 
     public function actionIndex()
     {
-        $reflection = new \ReflectionClass(Promo::class);
-        echo $reflection->getShortName();
+        $promo = Promo::findOne(1);
+        var_dump($promo);
     }
 }

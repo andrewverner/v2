@@ -276,12 +276,17 @@ $(function () {
     $(document).on('click', '.ajax-pagination ul.pagination a', function (e) {
         e.preventDefault();
 
+        $.loader.show();
+
         var $link = $(this);
         $.ajax({
             url: $link.attr('href'),
             type: 'get',
             success: function (data) {
                 $link.closest('.ajax-pagination').html(data);
+            },
+            complete: function () {
+                $.loader.hide();
             }
         });
     });
