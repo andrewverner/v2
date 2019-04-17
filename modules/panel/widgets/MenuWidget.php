@@ -37,6 +37,7 @@ class MenuWidget extends Widget
                 new MenuItem('Order statuses', 'fas fa-cogs', '/panel/order-status'),
                 new MenuItem('Item statuses', 'fas fa-cogs', '/panel/item-status'),
                 new MenuItem('Delivery types', 'fas fa-truck', '/panel/delivery-type'),
+                new MenuItem('Pickup points', 'fas fa-warehouse', '/panel/pickup-point'),
                 new MenuItem('Promo', 'fas fa-percent', '/panel/promo'),
                 new MenuItem('Email templates', 'fas fa-envelope', '/panel/email-template'),
                 new MenuItem('App settings', 'fas fa-cogs', '/panel/settings'),

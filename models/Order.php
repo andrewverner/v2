@@ -14,6 +14,7 @@ use Yii;
  * @property string $email
  * @property string $phone
  * @property int $delivery_type
+ * @property int $pickup_point_id
  * @property int $status_id
  * @property string $created
  * @property string $updated
@@ -26,6 +27,7 @@ use Yii;
  * @property OrderStatusLog[] $statusLog
  * @property OrderStatusLog $lastStatusLog
  * @property DeliveryType $deliveryType
+ * @property PickupPoint $pickupPoint
  *
  * @property float $price
  */
@@ -45,7 +47,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'address_id', 'delivery_type', 'status_id'], 'integer'],
+            [['user_id', 'address_id', 'delivery_type', 'status_id', 'pickup_point_id'], 'integer'],
             [['contact_name', 'email', 'phone'], 'required'],
             [['created', 'updated'], 'safe'],
             [['contact_name', 'email'], 'string', 'max' => 255],
@@ -66,6 +68,7 @@ class Order extends \yii\db\ActiveRecord
             'email' => Yii::t('app', 'Email'),
             'phone' => Yii::t('app', 'Phone'),
             'delivery_type' => Yii::t('app', 'Delivery Type'),
+            'pickup_point_id' => Yii::t('app', 'Pickup Point ID'),
             'status_id' => Yii::t('app', 'Status ID'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
@@ -132,5 +135,10 @@ class Order extends \yii\db\ActiveRecord
             ->orderBy(['datetime' => SORT_DESC])
             ->limit(1)
             ->one();
+    }
+
+    public function getPickupPoint()
+    {
+        return $this->hasOne(PickupPoint::class, ['id' => 'pickup_point_id']);
     }
 }

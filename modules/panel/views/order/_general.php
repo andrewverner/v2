@@ -43,17 +43,25 @@
                 return $model->deliveryInfo->unrestricted_value ?? null;
             }
         ],
+        [
+            'label' => Yii::t('app', 'Pickup point'),
+            'value' => function ($model) {
+                /**
+                 * @var \app\models\Order $model
+                 */
+                return $model->pickupPoint->address ?? null;
+            }
+        ],
         'created'
     ]
 ]); ?>
-<?php if ($model->deliveryInfo): ?>
+<?php if ($model->deliveryInfo || $model->pickupPoint): ?>
+<?php $lat = $model->deliveryInfo->geo_lat ?? $model->pickupPoint->geo_lat; ?>
+<?php $lng = $model->deliveryInfo->geo_lng ?? $model->pickupPoint->geo_lng; ?>
+<?php $title = $model->deliveryInfo->unrestricted_value ?? $model->pickupPoint->address; ?>
 <p>
     <?php $map = \app\modules\panel\widgets\YMapWidget::begin(); ?>
-    <?php $map->addPlacemark(new \app\modules\panel\widgets\YMapPlacemark(
-        $model->deliveryInfo->geo_lat,
-        $model->deliveryInfo->geo_lng,
-        $model->deliveryInfo->unrestricted_value
-    )); ?>
+    <?php $map->addPlacemark(new \app\modules\panel\widgets\YMapPlacemark($lat, $lng, $title)); ?>
     <?php \app\modules\panel\widgets\YMapWidget::end(); ?>
 </p>
 <?php endif; ?>
