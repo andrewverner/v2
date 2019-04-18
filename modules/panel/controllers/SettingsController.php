@@ -9,8 +9,14 @@
 namespace app\modules\panel\controllers;
 
 use app\components\Controller;
+use app\components\settings\Settings;
 
 class SettingsController extends Controller
 {
-
+    public function actionIndex()
+    {
+        return $this->render('index', [
+            'common' => Settings::instance()->common(),
+        ]);
+    }
 }

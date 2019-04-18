@@ -8,6 +8,7 @@
 
 namespace app\controllers;
 
+use app\components\settings\Settings;
 use app\models\OrderStatus;
 use app\models\Promo;
 
@@ -25,7 +26,6 @@ class TestController extends \app\components\Controller
 
     public function actionIndex()
     {
-        $promo = Promo::findOne(1);
-        var_dump($promo);
+        print_r(Settings::instance()->common()->fields);
     }
 }
