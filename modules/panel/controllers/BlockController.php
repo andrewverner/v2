@@ -2,126 +2,49 @@
 
 namespace app\modules\panel\controllers;
 
-use Yii;
 use app\models\Block;
-use app\modules\panel\models\BlockSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * BlockController implements the CRUD actions for Block model.
  */
 class BlockController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Lists all Block models.
-     * @return mixed
-     */
     public function actionIndex()
     {
-        $searchModel = new BlockSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Block::find()->orderBy(['code' => SORT_ASC]),
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'pagination' => [
+                'pageSize' => 25,
+            ],
         ]);
     }
 
-    /**
-     * Displays a single Block model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
+    public function actionForm($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $id ? Block::findOne($id) : new Block();
+
+        return $this->renderAjax('_form', ['model' => $model]);
     }
 
-    /**
-     * Creates a new Block model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
+    public function actionSave()
     {
-        $model = new Block();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $id = ArrayHelper::getValue(Yii::$app->request->post('Block'), 'id');
+        $model = $id ? Block::findOne($id) : new Block();
+        $model->load(Yii::$app->request->post());
+        if (!$model->validate()) {
+            throw new BadRequestHttpException(Html::ul($model->getErrorSummary(true)));
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Block model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Block model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Block model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Block the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Block::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        $model->save();
     }
 }

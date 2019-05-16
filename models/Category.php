@@ -22,6 +22,7 @@ use yii\db\ActiveRecord;
  * @property int $published
  *
  * @property Seo $seo
+ * @property ItemCategory $itemRels
  */
 class Category extends ActiveRecord
 {
@@ -106,5 +107,10 @@ class Category extends ActiveRecord
     public function getParentNode()
     {
         return $this->parents(1)->one();
+    }
+
+    public function getItemRels()
+    {
+        return $this->hasMany(ItemCategory::class, ['category_id' => 'id']);
     }
 }

@@ -17,6 +17,7 @@ use yii\db\Expression;
  * @property string $updated
  *
  * @property Category $category
+ * @property Item $item
  */
 class ItemCategory extends ActiveRecord
 {
@@ -71,5 +72,10 @@ class ItemCategory extends ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    public function getItem()
+    {
+        return $this->hasOne(Item::class, ['id' => 'item_id']);
     }
 }

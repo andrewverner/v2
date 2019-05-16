@@ -64,6 +64,7 @@ $this->title = Yii::t('app', 'Categories');
                                         [
                                             'class' => 'mf-grid-control-btn delete-category',
                                             'data-id' => $model['id'],
+                                            'data-loader' => '',
                                             'data-get-form' => '',
                                             'data-type' => 'get',
                                             'data-msg' => Yii::t('app', 'Seo record has been saved'),
@@ -71,6 +72,13 @@ $this->title = Yii::t('app', 'Categories');
                                                 '/panel/seo/form-by-entity',
                                                 'type' => \app\models\Category::class,
                                             ]),
+                                        ]
+                                    ),
+                                    \yii\helpers\Html::a(
+                                        '<i class="fas fa-list"></i>',
+                                        Yii::$app->urlManager->createUrl("/panel/category/{$model->id}/items"),
+                                        [
+                                            'class' => 'mf-grid-control-btn',
                                         ]
                                     ),
                                     \yii\helpers\Html::tag(

@@ -106,7 +106,6 @@ $(function () {
                 ]);
 
                 $('body').append($modal);
-                $('.select2').select2();
                 $modal.modal('show');
 
                 $modal.on('hidden.bs.modal', function () {

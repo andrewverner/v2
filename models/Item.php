@@ -169,6 +169,10 @@ class Item extends ActiveRecord
 
     public function getMainImage()
     {
+        if (!$this->imageRels) {
+            return Yii::$app->params['no-image'];
+        }
+
         foreach ($this->imageRels as $imageRel) {
             if ($imageRel->is_main) {
                 return $imageRel->image->getSource();

@@ -6,6 +6,7 @@ use Yii;
 use app\models\Category;
 use app\models\CategorySearch;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\BadRequestHttpException;
@@ -88,5 +89,22 @@ class CategoryController extends Controller
         }
 
         $model->deleteWithChildren();
+    }
+
+    public function actionItems($id)
+    {
+        if (!$model = Category::findOne($id)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Category not found'));
+        }
+
+        return $this->render('items', [
+            'model' => $model,
+            'dataProvider' => new ArrayDataProvider([
+                'allModels' => $model->itemRels,
+                'pagination' => [
+                    'pageSize' => 48,
+                ],
+            ]),
+        ]);
     }
 }

@@ -10,12 +10,19 @@ use Yii;
  * @property int $id
  * @property string $code
  * @property string $text
+ * @property int $position
+ * @property int $type
  * @property int $active
  * @property string $created
  * @property string $updated
  */
 class Block extends \yii\db\ActiveRecord
 {
+    const TYPE_TEXT = 1;
+    const TYPE_PRODUCTS_LIST = 2;
+
+    const POSITION_MAIN_PAGE_TOP = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -30,9 +37,9 @@ class Block extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code'], 'required'],
+            [['code', 'position'], 'required'],
             [['text'], 'string'],
-            [['active'], 'integer'],
+            [['position', 'type', 'active'], 'integer'],
             [['created', 'updated'], 'safe'],
             [['code'], 'string', 'max' => 45],
         ];
@@ -47,9 +54,30 @@ class Block extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'code' => Yii::t('app', 'Code'),
             'text' => Yii::t('app', 'Text'),
+            'position' => Yii::t('app', 'Position'),
+            'type' => Yii::t('app', 'Type'),
             'active' => Yii::t('app', 'Active'),
             'created' => Yii::t('app', 'Created'),
             'updated' => Yii::t('app', 'Updated'),
         ];
+    }
+
+    public static function getTypesList($id = null)
+    {
+        $list = [
+            self::TYPE_TEXT => Yii::t('app', 'Text'),
+            self::TYPE_PRODUCTS_LIST => Yii::t('app', 'Products list'),
+        ];
+
+        return $id ? ($list[$id] ?? null) : $list;
+    }
+
+    public static function getPositionsList($id = null)
+    {
+        $list = [
+            self::POSITION_MAIN_PAGE_TOP => Yii::t('app', 'Top section of the main page'),
+        ];
+
+        return $id ? ($list[$id] ?? null) : $list;
     }
 }
