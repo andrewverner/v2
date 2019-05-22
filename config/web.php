@@ -83,6 +83,9 @@ $config = [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
                     ],
+                    'on missingTranslation' => [
+                        'app\components\TranslationEventHandler', 'handleMissingTranslation'
+                    ]
                 ],
             ],
         ],

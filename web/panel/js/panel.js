@@ -22,7 +22,7 @@ $(function () {
             'data-backdrop': getValue($el.data('backdrop'), 'true')
         }).append(
             $('<div></div>').attr({
-                'class': 'modal-dialog'
+                'class': 'modal-dialog modal-' + getValue($el.data('dialog-size'), 'md')
             }).append(
                 $('<div></div>').attr({
                     'class': 'modal-content'

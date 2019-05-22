@@ -235,3 +235,20 @@ ul.property-value-list li.active:after {
 .category-item:hover .drop-relation-btn {
     display: block;
 }
+
+.item-mini-thumb {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.mini-item-card {
+    background-size: cover;
+    background-position: 50% 50%;
+    width: 25%;
+    display: inline-block;
+    border: 1px solid #999;
+    height: 120px;
+}

@@ -8,10 +8,14 @@
 
 namespace app\modules\panel\controllers;
 
+use app\models\Item;
 use app\models\Order;
 use app\models\OrderStatus;
 use app\models\OrderStatusLog;
 use app\models\User;
+use app\modules\panel\models\ItemSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -99,5 +103,28 @@ class OrderController extends Controller
         }
 
         OrderStatusLog::create($order, $status);
+    }
+
+    public function actionCreateOrder()
+    {
+        $searchModel = new ItemSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('create-order', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    public function actionItemsList()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Item::find(),
+            'pagination' => [
+                'pageSize' => 2,
+            ],
+        ]);
+
+        return $this->renderAjax('_items-list', ['dataProvider' => $dataProvider]);
     }
 }

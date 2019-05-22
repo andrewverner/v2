@@ -32,7 +32,7 @@ $this->title = Yii::t('app', 'Sizes');
                     </div>
                 </div>
                 <div class="box-body table-responsive">
-                    <?php Pjax::begin(['id' => 'user-pjax']); ?>
+                    <?php Pjax::begin(['id' => 'sizes-pjax']); ?>
                     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
                     <?= GridView::widget([
